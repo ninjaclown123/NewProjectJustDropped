@@ -17,6 +17,7 @@ class Recipe:
 
 
 
+
 class RecipeManager:
     def __init__(self):
         self.data = [
