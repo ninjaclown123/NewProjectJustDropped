@@ -16,10 +16,12 @@ class Recipe:
         return f"Recipe: {self.recipe_name}\nAuthor: {self.recipe_author}\nPreparation Time: {self.prep_time} minutes\nCook Time: {self.cook_time} minutes\nServing Size: {self.serving_size}\nIngredients:\n{ingredient_list}\nInstructions:\n{instructions_list}"
 
 
+
 class RecipeManager:
     def __init__(self):
         self.data = [
             {
+                "id":0,
                 "recipeName": "McBurger",
                 "recipeAuthor": "Sam",
                 "prepTime": 10,
@@ -46,6 +48,7 @@ class RecipeManager:
                 }
             },
             {
+                "id":1,
                 "recipeName": "Spaghetti Bolognese",
                 "recipeAuthor": "Fahed",
                 "prepTime": 15,
@@ -83,6 +86,7 @@ class RecipeManager:
                 }
             },
             {
+                "id":2,
                 "recipeName": "Chocolate Chip Cookies",
                 "recipeAuthor": "Salmoan",
                 "prepTime": 20,
@@ -122,27 +126,27 @@ class RecipeManager:
             }
         ]
 
-    def viewRecipe(self):
+    def viewRecipe(self): #raid
         # this method should print all recipes to the screen.
         pass
 
-    def addRecipe(self):
+    def addRecipe(self): #fehad
         # this method should add a new recipe to the recipes list
         pass
 
-    def editRecipe(self, recipeName):
+    def editRecipe(self, id): #hamza
         # this method should find a recipe by name and edit the recipe.
         pass
 
-    def deleteRecipe(self, recipeName):
+    def deleteRecipe(self, id): #josh
         # this method should find a recipe by name and delete it.
         pass
 
-    def exportRecipes(self):
+    def exportRecipes(self): #sam
         # exports recipes to a .json file
         pass
 
-    def importRecipes(self):
+    def importRecipes(self): #sam
         # imports recipes from a .json file
         pass
 
@@ -168,5 +172,7 @@ recipe = Recipe(
         4: "Cook the assembled burger for 12 minutes."
     }
 )
+
+
 
 rm = RecipeManager()
