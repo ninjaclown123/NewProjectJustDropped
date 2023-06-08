@@ -12,8 +12,8 @@ from Core.recipeProject import RecipeManager
 
 class TestRecipeManagement(unittest.TestCase):
 
-    def test_exported_JSON_file(self, *fname):
-        fname = 'unittestRecipe'
+    def test_exported_JSON_file(self):
+
         rm = RecipeManager()
 
         rm.data = [
@@ -123,9 +123,9 @@ class TestRecipeManagement(unittest.TestCase):
             }
         ]
 
-        rm.exportRecipes(fname)
+        rm.exportRecipes('unittestRecipeExport')
 
-        file_path = 'Core/exports/' + fname + '.json'
+        file_path = "Core/exports/unittestRecipeExport.json"
 
         file = open(file_path, "r")
 

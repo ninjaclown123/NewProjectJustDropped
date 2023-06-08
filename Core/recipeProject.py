@@ -145,15 +145,14 @@ class RecipeManager:
         # this method should find a recipe by name and delete it.
         pass
 
-    def exportRecipes(self, *filename):  # sam
+    def exportRecipes(self, filename="DefaultExportName"):  # sam
         # exports recipes to a .json file
 
         if not os.path.exists("Core/exports/"):
             os.makedirs("Core/exports/")
 
-        if len(filename) < 1:
-            filename = "DefaultExportName"
 
+        print(filename,'xxxx')
         filepath = "Core/exports/" + str(filename) + ".json"
         file = open(filepath, "w")
 
