@@ -135,9 +135,10 @@ class RecipeManager:
         # this method should print all recipes to the screen.
         pass
 
-    def addRecipe(self):  # fehad
+    def addRecipe(self, recipe):  # fahad
         # this method should add a new recipe to the recipes list
-        pass
+
+        self.data.append(recipe)
 
     def editRecipe(self, id):  # hamza
         # this method should find a recipe by name and edit the recipe.
