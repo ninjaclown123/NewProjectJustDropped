@@ -3,6 +3,7 @@ import os
 
 
 class Recipe:
+    
     def __init__(self, recipe_name, recipe_author, prep_time, cook_time, serving_size, ingredients, instructions):
         self.recipe_name = recipe_name
         self.recipe_author = recipe_author
