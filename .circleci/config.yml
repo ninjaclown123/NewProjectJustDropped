@@ -33,7 +33,7 @@ jobs:
       - run:
           name: Run export test
           # This assumes pytest is installed via the install-package step above
-          command: python -m unittest discovery
+          command: python -m unittest discover
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
