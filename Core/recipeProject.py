@@ -1,5 +1,6 @@
 import json
 import os
+from json.decoder import JSONDecodeError
 
 
 class Recipe:
@@ -152,8 +153,6 @@ class RecipeManager:
         if not os.path.exists("Core/exports/"):
             os.makedirs("Core/exports/")
 
-
-        print(filename,'xxxx')
         filepath = "Core/exports/" + str(filename) + ".json"
         file = open(filepath, "w")
 
@@ -165,9 +164,38 @@ class RecipeManager:
 
         return True
 
-    def importRecipes(self):  # sam
+    def importRecipes(self,filename):  # sam
         # imports recipes from a .json file
-        pass
+        
+        #filepath = "Core/exports/" + str(filename) + ".json"
+
+        folder_path = 'Core/imports'
+
+        if not os.path.exists(folder_path):
+            print("Imports folder has not been initialized in Core/.")
+            return "Import404"
+        
+        file_path = folder_path +'/' + str(filename) + '.json'
+        
+        if not os.path.exists(file_path):
+            print('The file ' + str(filename) + ' in ' + file_path + ' does not exist')
+            return "File404"
+        
+        file = open(file_path,'r')
+
+        try:
+            fileData = json.load(file)
+            self.data = fileData
+            print("Import Success")
+            file.close()
+            return True
+        
+        except JSONDecodeError:
+            raise ValueError(f'The selected JSON file "{filename}.json" is corrupted.') 
+
+
+        
+            
 
 
 recipe = Recipe(
@@ -195,6 +223,6 @@ recipe = Recipe(
 
 # rm = RecipeManager()
 
-# rm.exportRecipes("testingRecipe23")
+# rm.importRecipes('recipes')
 
 
