@@ -131,6 +131,20 @@ class RecipeManager:
 
     def viewRecipe(self):  # raid
         # this method should print all recipes to the screen.
+        recpice_manager = RecipeManager()
+        recipe = recpice_manager.data[0]
+        recpie_obj = Recipe(
+            recipe['recipeName'],
+            recipe['recpeAuthor'],
+            recipe['prepTime'],
+            recipe['cookTime'],
+            recipe['servingSize'],
+            recipe['ingredients'],
+            recipe['instructions']
+
+        )
+        recipe_str = str(recpie_obj)
+        print(recipe_str)
         pass
 
     def addRecipe(self):  # fehad
