@@ -1,5 +1,5 @@
 import unittest
-import recipeProject
+from Core.recipeProject import RecipeManager
 
 class TestRecipeManagement(unittest.TestCase):
 
