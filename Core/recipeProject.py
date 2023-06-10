@@ -140,9 +140,27 @@ class RecipeManager:
 
         self.data.append(recipe)
 
-    def editRecipe(self, id):  # hamza
-        # this method should find a recipe by name and edit the recipe.
-        pass
+    def updateRecipe(self, id, new_recipe_name=None, new_recipe_author=None, new_prep_time=None, new_cook_time=None,
+                     new_serving_size=None):
+        # Create a mapping from attribute names to new values
+        attributes_to_update = {
+            "recipeName": new_recipe_name,
+            "recipeAuthor": new_recipe_author,
+            "prepTime": new_prep_time,
+            "cookTime": new_cook_time,
+            "servingSize": new_serving_size
+        }
+
+        for recipe in self.data:
+            if recipe["id"] == id:
+                # Only replace values if a new value is provided
+                for attribute, new_value in attributes_to_update.items():
+                    if new_value is not None:
+                        recipe[attribute] = new_value
+                return True
+
+        # Return False if the recipe was not found
+        return False
 
     def deleteRecipe(self, id):  # josh
         # this method should find a recipe by name and delete it.
