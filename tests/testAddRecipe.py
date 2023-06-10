@@ -112,6 +112,6 @@ class TestRecipeManagement(unittest.TestCase):
                     "9": "Allow cookies to cool on baking sheets for a few minutes before transferring to wire racks to cool completely."
                 }
             }
-        rm.data.append(newRecipe)
+        rm.addRecipe(newRecipe)
         self.assertIn(newRecipe, rm.data)
     
