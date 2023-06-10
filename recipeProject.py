@@ -140,8 +140,14 @@ class RecipeManager:
         pass
 
     def deleteRecipe(self, id): #josh
-        # this method should find a recipe by name and delete it.
-        pass
+        # this method should find a recipe by id and delete it.
+
+        for item in self.data:
+            if item.id == id:
+                self.data.remove(item)
+                return
+        
+        print("ID not found in the list of recipes.")
 
     def exportRecipes(self): #sam
         # exports recipes to a .json file
