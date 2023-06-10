@@ -1,12 +1,12 @@
 import unittest
-import recipeProject
+from Core.recipeProject import RecipeManager
 
 class TestRecipeManagement(unittest.TestCase):
 
     # tests basic functionality
     # expected: the system will delete the item with the specified id.
     def test_delete_recipe(self):
-        rm = recipeProject.RecipeManager()
+        rm = RecipeManager()
         rm.deleteRecipe(0)
         itemZero = next((recipe for recipe in rm.data if recipe.get("id") == 0), None)
         self.assertEqual(None, itemZero)
@@ -14,7 +14,7 @@ class TestRecipeManagement(unittest.TestCase):
     # tests deleting non-existent id
     # expected: the method will not delete the non-existent item.
     def test_delete_recipe_NON_EXISTENT_ID(self):
-        rm = recipeProject.RecipeManager()
+        rm = RecipeManager()
         count = len(rm.data)
         rm.deleteRecipe(846)
         self.assertEqual(count, len(rm.data))
@@ -22,7 +22,7 @@ class TestRecipeManagement(unittest.TestCase):
     # tests deleting string id
     # expected: the method will not delete the recipe.
     def test_delete_recipe_STRING_ID(self):
-        rm = recipeProject.RecipeManager()
+        rm = RecipeManager()
         rm.deleteRecipe("0")
         itemZero = next((dictionary for dictionary in rm.data if dictionary.get("id") == 0), None)
         self.assertIn(itemZero, rm.data)
