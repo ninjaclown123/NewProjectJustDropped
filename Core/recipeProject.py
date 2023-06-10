@@ -1,4 +1,10 @@
+import json
+import os
+from json.decoder import JSONDecodeError
+
+
 class Recipe:
+    
     def __init__(self, recipe_name, recipe_author, prep_time, cook_time, serving_size, ingredients, instructions):
         self.recipe_name = recipe_name
         self.recipe_author = recipe_author
@@ -129,40 +135,68 @@ class RecipeManager:
         # this method should print all recipes to the screen.
         pass
 
-    def addRecipe(self):  # fehad
+    def addRecipe(self, recipe):  # fahad
         # this method should add a new recipe to the recipes list
+
+        self.data.append(recipe)
+
+    def editRecipe(self, id):  # hamza
+        # this method should find a recipe by name and edit the recipe.
         pass
-
-    def updateRecipe(self, id, new_recipe_name=None, new_recipe_author=None, new_prep_time=None, new_cook_time=None,
-                     new_serving_size=None):
-        attributes_to_update = {
-            "recipeName": new_recipe_name,
-            "recipeAuthor": new_recipe_author,
-            "prepTime": new_prep_time,
-            "cookTime": new_cook_time,
-            "servingSize": new_serving_size
-        }
-
-        for recipe in self.data:
-            if recipe["id"] == id:
-                for attribute, new_value in attributes_to_update.items():
-                    if new_value is not None:
-                        recipe[attribute] = new_value
-                return True
-
-        return False
 
     def deleteRecipe(self, id):  # josh
         # this method should find a recipe by name and delete it.
         pass
 
-    def exportRecipes(self):  # sam
+    def exportRecipes(self, filename="DefaultExportName"):  # sam
         # exports recipes to a .json file
-        pass
 
-    def importRecipes(self):  # sam
+        if not os.path.exists("Core/exports/"):
+            os.makedirs("Core/exports/")
+
+        filepath = "Core/exports/" + str(filename) + ".json"
+        file = open(filepath, "w")
+
+        json.dump(self.data, file, indent=4)
+
+        file.close()
+
+        print("export success")
+
+        return True
+
+    def importRecipes(self,filename):  # sam
         # imports recipes from a .json file
-        pass
+        
+        #filepath = "Core/exports/" + str(filename) + ".json"
+
+        folder_path = 'Core/imports'
+
+        if not os.path.exists(folder_path):
+            print("Imports folder has not been initialized in Core/.")
+            return "Import404"
+        
+        file_path = folder_path +'/' + str(filename) + '.json'
+        
+        if not os.path.exists(file_path):
+            print('The file ' + str(filename) + ' in ' + file_path + ' does not exist')
+            return "File404"
+        
+        file = open(file_path,'r')
+
+        try:
+            fileData = json.load(file)
+            self.data = fileData
+            print("Import Success")
+            file.close()
+            return True
+        
+        except JSONDecodeError:
+            raise ValueError(f'The selected JSON file "{filename}.json" is corrupted.') 
+
+
+        
+            
 
 
 recipe = Recipe(
@@ -187,4 +221,9 @@ recipe = Recipe(
     }
 )
 
-rm = RecipeManager()
+
+# rm = RecipeManager()
+
+# rm.importRecipes('recipes')
+
+
