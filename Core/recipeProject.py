@@ -164,7 +164,7 @@ class RecipeManager:
 
     def deleteRecipe(self, id):  # josh
         for item in self.data:
-            if item.id == id:
+            if item["id"] == id:
                 self.data.remove(item)
                 return
         
