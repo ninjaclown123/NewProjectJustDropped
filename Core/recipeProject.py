@@ -132,10 +132,17 @@ class RecipeManager:
         self.data = [recipe1,recipe2,recipe3]
 
     def viewRecipeList(self):
-        print("ID  RecipeName           RecipeAuthor  PrepTime  CookTime  ServingSize")
+        print("{:<3} {:<23} {:<12} {:<9} {:<9} {}".format(
+        "ID", "RecipeName", "RecipeAuthor", "PrepTime", "CookTime", "ServingSize"))
         print("---------------------------------------------------------------------")
         for recipe in self.data:
-            print("{:<3} {:<20} {:<12} {:<9} {:<9} {}".format(recipe.id, recipe.recipe_name, recipe.recipe_author, recipe.prep_time, recipe.cook_time, recipe.serving_size))
+            if len(recipe.recipe_name) >= 20:
+                rName = recipe.recipe_name[:-2]
+                print("{:<3} {:<23} {:<12} {:<9} {:<9} {}".format(
+                    recipe.id, rName, recipe.recipe_author, recipe.prep_time, recipe.cook_time, recipe.serving_size))
+            else:
+                print("{:<3} {:<23} {:<12} {:<9} {:<9} {}".format(
+                    recipe.id, recipe.recipe_name, recipe.recipe_author, recipe.prep_time, recipe.cook_time, recipe.serving_size))
 
     def addRecipe(self, recipe):  # fahad
         # this method should add a new recipe to the recipes list
