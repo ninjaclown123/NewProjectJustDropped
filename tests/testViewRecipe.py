@@ -20,6 +20,7 @@ class TestRecipeManagement(unittest.TestCase):
             self.recipes.append(recipe_obj)
 
     def test_view_recipes_List(self):
+        self.viewRecipeList()
         rm = RecipeManager()
         
         testData = [
