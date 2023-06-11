@@ -131,9 +131,22 @@ class RecipeManager:
             }
         ]
 
-    def viewRecipe(self):  # raid
+    def viewRecipeList(self):  # raid
         # this method should print all recipes to the screen.
-        pass
+        print("ID  RecipeName  RecipeAuthor  PrepTime  CookTime  ServingSize ")
+        print("----------------------------------------------------------------")
+        for index, recipe_data in enumerate(self.data):
+            recipe_obj = Recipe(
+                        recipe['recipeName'],
+                        recipe['recpeAuthor'],
+                        recipe['prepTime'],
+                        recipe['cookTime'],
+                        recipe['servingSize'],
+                        recipe['ingredients'],
+                        recipe['instructions']
+                        )
+            recipe_str = f"{index:<2} {recipe_obj.recipe_name:<21} {recipe_obj.recipe_author:<13} {recipe_obj.prep_time:<9} {recipe_obj.cook_time:<9} {recipe_obj.serving_size:<11}"
+            print(recipe_str)
 
     def addRecipe(self, recipe):  # fahad
         # this method should add a new recipe to the recipes list
