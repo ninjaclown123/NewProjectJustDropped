@@ -144,9 +144,14 @@ class RecipeManager:
                 print("{:<3} {:<23} {:<12} {:<9} {:<9} {}".format(
                     recipe.id, recipe.recipe_name, recipe.recipe_author, recipe.prep_time, recipe.cook_time, recipe.serving_size))
 
+
     def addRecipe(self, recipe):  # fahad
         # this method should add a new recipe to the recipes list
-
+        for r in self.data:
+            if r["id"] == recipe["id"]:
+                raise Exception("Recipe with the same ID already exists!")
+            if r["recipeName"] == recipe["recipeName"]:
+                raise Exception("Recipe with the same name already exists!")
         self.data.append(recipe)
 
     def updateRecipe(self, id, new_recipe_name=None, new_recipe_author=None, new_prep_time=None, new_cook_time=None,
