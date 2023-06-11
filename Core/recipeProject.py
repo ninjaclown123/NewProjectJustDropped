@@ -141,14 +141,16 @@ class RecipeManager:
         self.data.append(recipe)
 
     def updateRecipe(self, id, new_recipe_name=None, new_recipe_author=None, new_prep_time=None, new_cook_time=None,
-                     new_serving_size=None):
+                     new_serving_size=None, new_ingredients=None, new_instructions=None):
         # Create a mapping from attribute names to new values
         attributes_to_update = {
             "recipeName": new_recipe_name,
             "recipeAuthor": new_recipe_author,
             "prepTime": new_prep_time,
             "cookTime": new_cook_time,
-            "servingSize": new_serving_size
+            "servingSize": new_serving_size,
+            "ingredients": new_ingredients,
+            "instructions": new_instructions
         }
 
         for recipe in self.data:
