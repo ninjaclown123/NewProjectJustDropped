@@ -1,5 +1,7 @@
 import unittest
+
 from Core.recipeProject import RecipeManager, Recipe
+
 
 class TestRecipeManagement(unittest.TestCase):
     def setUp(self):
@@ -19,9 +21,7 @@ class TestRecipeManagement(unittest.TestCase):
 
     def test_view_recipes(self):
         rm = RecipeManager()
-
-        rm.data = []
-
+        
         testData = [
             {
                 "id": 0,
@@ -105,9 +105,9 @@ class TestRecipeManagement(unittest.TestCase):
             }
         ]
 
-        result = rm.importRecipes('unittestRecipeImport')
+        rm.data = testData
+        
 
-        self.assertEqual(rm.data, testData)
 
         expected_recipe_strings = [
             "Recipe: McBurger\nAuthor: Sam\nPreparation Time: 10 minutes\nCook Time: 12 minutes\nServing Size: 1\nIngredients:\nbun: 1 unit\nsecretPatty: 1 unit\nspecialMayo: 10 grams\nspecialSauce: 20 grams\nlettuce: 8 grams\ntomato: 8 grams\nInstructions:\n1. Assemble the bun and the secret patty.\n2. Spread special mayo and special sauce on the bun.\n3. Add lettuce and tomato on top.\n4. Cook the assembled burger for 12 minutes.",

@@ -1,8 +1,10 @@
 import json
 import os
+from json.decoder import JSONDecodeError
 
 
 class Recipe:
+    
     def __init__(self, recipe_name, recipe_author, prep_time, cook_time, serving_size, ingredients, instructions):
         self.recipe_name = recipe_name
         self.recipe_author = recipe_author
@@ -150,17 +152,44 @@ class RecipeManager:
             print("--------------------")
         pass
 
-    def addRecipe(self):  # fehad
+    def addRecipe(self, recipe):  # fahad
         # this method should add a new recipe to the recipes list
-        pass
+        for r in self.data:
+            if r["id"] == recipe["id"]:
+                raise Exception("Recipe with the same ID already exists!")
+            if r["recipeName"] == recipe["recipeName"]:
+                raise Exception("Recipe with the same name already exists!")
+        self.data.append(recipe)
 
-    def editRecipe(self, id):  # hamza
-        # this method should find a recipe by name and edit the recipe.
-        pass
+    def updateRecipe(self, id, new_recipe_name=None, new_recipe_author=None, new_prep_time=None, new_cook_time=None,
+                     new_serving_size=None):
+        # Create a mapping from attribute names to new values
+        attributes_to_update = {
+            "recipeName": new_recipe_name,
+            "recipeAuthor": new_recipe_author,
+            "prepTime": new_prep_time,
+            "cookTime": new_cook_time,
+            "servingSize": new_serving_size
+        }
+
+        for recipe in self.data:
+            if recipe["id"] == id:
+                # Only replace values if a new value is provided
+                for attribute, new_value in attributes_to_update.items():
+                    if new_value is not None:
+                        recipe[attribute] = new_value
+                return True
+
+        # Return False if the recipe was not found
+        return False
 
     def deleteRecipe(self, id):  # josh
-        # this method should find a recipe by name and delete it.
-        pass
+        for item in self.data:
+            if item["id"] == id:
+                self.data.remove(item)
+                return
+        
+        print("ID not found in the list of recipes.")
 
     def exportRecipes(self, filename="DefaultExportName"):  # sam
         # exports recipes to a .json file
@@ -168,8 +197,6 @@ class RecipeManager:
         if not os.path.exists("Core/exports/"):
             os.makedirs("Core/exports/")
 
-
-        print(filename,'xxxx')
         filepath = "Core/exports/" + str(filename) + ".json"
         file = open(filepath, "w")
 
@@ -181,9 +208,38 @@ class RecipeManager:
 
         return True
 
-    def importRecipes(self):  # sam
+    def importRecipes(self,filename):  # sam
         # imports recipes from a .json file
-        pass
+        
+        #filepath = "Core/exports/" + str(filename) + ".json"
+
+        folder_path = 'Core/imports'
+
+        if not os.path.exists(folder_path):
+            print("Imports folder has not been initialized in Core/.")
+            return "Import404"
+        
+        file_path = folder_path +'/' + str(filename) + '.json'
+        
+        if not os.path.exists(file_path):
+            print('The file ' + str(filename) + ' in ' + file_path + ' does not exist')
+            return "File404"
+        
+        file = open(file_path,'r')
+
+        try:
+            fileData = json.load(file)
+            self.data = fileData
+            print("Import Success")
+            file.close()
+            return True
+        
+        except JSONDecodeError:
+            raise ValueError(f'The selected JSON file "{filename}.json" is corrupted.') 
+
+
+        
+            
 
 
 recipe = Recipe(
@@ -211,6 +267,6 @@ recipe = Recipe(
 
 # rm = RecipeManager()
 
-# rm.exportRecipes("testingRecipe23")
+# rm.importRecipes('recipes')
 
 
