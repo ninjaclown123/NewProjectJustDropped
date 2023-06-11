@@ -137,7 +137,11 @@ class RecipeManager:
 
     def addRecipe(self, recipe):  # fahad
         # this method should add a new recipe to the recipes list
-
+        for r in self.data:
+            if r["id"] == recipe["id"]:
+                raise Exception("Recipe with the same ID already exists!")
+            if r["recipeName"] == recipe["recipeName"]:
+                raise Exception("Recipe with the same name already exists!")
         self.data.append(recipe)
 
     def updateRecipe(self, id, new_recipe_name=None, new_recipe_author=None, new_prep_time=None, new_cook_time=None,
@@ -165,8 +169,12 @@ class RecipeManager:
         return False
 
     def deleteRecipe(self, id):  # josh
-        # this method should find a recipe by name and delete it.
-        pass
+        for item in self.data:
+            if item["id"] == id:
+                self.data.remove(item)
+                return
+        
+        print("ID not found in the list of recipes.")
 
     def exportRecipes(self, filename="DefaultExportName"):  # sam
         # exports recipes to a .json file
