@@ -4,7 +4,7 @@ from Core.recipeProject import RecipeManager, Recipe
 
 
 class TestRecipeManagement(unittest.TestCase):
-    def setUp(self):
+    def viewRecipeList(self):
         self.recipe_manager = RecipeManager()
         self.recipes = []
         for recipe_data in self.recipe_manager.data:
@@ -19,7 +19,7 @@ class TestRecipeManagement(unittest.TestCase):
             )
             self.recipes.append(recipe_obj)
 
-    def test_view_recipes(self):
+    def test_view_recipes_List(self):
         rm = RecipeManager()
         
         testData = [
