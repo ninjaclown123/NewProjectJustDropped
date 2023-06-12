@@ -8,7 +8,7 @@ class TestRecipeManagement(unittest.TestCase):
     def test_delete_recipe(self):
         rm = RecipeManager()
         rm.deleteRecipe(0)
-        itemZero = next((recipe for recipe in rm.data if recipe.get("id") == 0), None)
+        itemZero = next((recipe for recipe in rm.data if recipe.id == 0), None)
         self.assertEqual(None, itemZero)
 
     # tests deleting non-existent id
@@ -24,7 +24,7 @@ class TestRecipeManagement(unittest.TestCase):
     def test_delete_recipe_STRING_ID(self):
         rm = RecipeManager()
         rm.deleteRecipe("0")
-        itemZero = next((dictionary for dictionary in rm.data if dictionary.get("id") == 0), None)
+        itemZero = next((recipe for recipe in rm.data if recipe.id == 0), None)
         self.assertIn(itemZero, rm.data)
 
 if __name__ == '__main__':
