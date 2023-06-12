@@ -147,9 +147,9 @@ class RecipeManager:
     def addRecipe(self, recipe):  # fahad
         # this method should add a new recipe to the recipes list
         for r in self.data:
-            if r["id"] == recipe["id"]:
+            if r.id == recipe.id:
                 raise Exception("Recipe with the same ID already exists!")
-            if r["recipeName"] == recipe["recipeName"]:
+            if r.recipe_name == recipe.recipe_name:
                 raise Exception("Recipe with the same name already exists!")
         self.data.append(recipe)
 
@@ -257,9 +257,36 @@ class RecipeManager:
 
 rm = RecipeManager()
 
-# rm.data = []
+rm.data = []
+recipe1 = Recipe(
+            0,
+            "McBurger",
+            "Sam",
+            10,
+            12,
+            1,
+            [
+                {"ingredientName": "bun", "quantity": 1, "measurement": "unit"},
+                {"ingredientName": "secretPatty",
+                    "quantity": 1, "measurement": "unit"},
+                {"ingredientName": "specialMayo",
+                    "quantity": 10, "measurement": "grams"},
+                {"ingredientName": "specialSauce",
+                    "quantity": 20, "measurement": "grams"},
+                {"ingredientName": "lettuce", "quantity": 8, "measurement": "grams"},
+                {"ingredientName": "tomato", "quantity": 8, "measurement": "grams"}
+            ],
+            {
+                "1": "Assemble the bun and the secret patty.",
+                "2": "Spread special mayo and special sauce on the bun.",
+                "3": "Add lettuce and tomato on top.",
+                "4": "Cook the assembled burger for 12 minutes."
+            }
+        )
+rm.addRecipe(recipe1)
+rm.addRecipe(recipe1)
 
-# rm.addRecipe(recipe)
+
 
 # print(rm.data)
 
