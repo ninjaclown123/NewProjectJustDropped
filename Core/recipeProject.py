@@ -153,27 +153,19 @@ class RecipeManager:
                 raise Exception("Recipe with the same name already exists!")
         self.data.append(recipe)
 
-    def updateRecipe(self, id, new_recipe_name=None, new_recipe_author=None, new_prep_time=None, new_cook_time=None,
-                     new_serving_size=None):
-        # Create a mapping from attribute names to new values
-        attributes_to_update = {
-            "recipeName": new_recipe_name,
-            "recipeAuthor": new_recipe_author,
-            "prepTime": new_prep_time,
-            "cookTime": new_cook_time,
-            "servingSize": new_serving_size
-        }
-
+    def editRecipe(self, newRecipe):
         for recipe in self.data:
-            if recipe["id"] == id:
-                # Only replace values if a new value is provided
-                for attribute, new_value in attributes_to_update.items():
-                    if new_value is not None:
-                        recipe[attribute] = new_value
-                return True
+            if recipe.id == newRecipe.id:
+                recipe.recipe_name = newRecipe.recipe_name or recipe.recipe_name
+                recipe.recipe_author = newRecipe.recipe_author or recipe.recipe_author
+                recipe.prep_time = newRecipe.prep_time or recipe.prep_time
+                recipe.cook_time = newRecipe.cook_time or recipe.cook_time
+                recipe.serving_size = newRecipe.serving_size or recipe.serving_size
+                recipe.ingredients = newRecipe.ingredients or recipe.ingredients
+                recipe.instructions = newRecipe.instructions or recipe.instructions
+                return
 
-        # Return False if the recipe was not found
-        return False
+        raise ValueError("Recipe ID not found in the list of recipes.")
 
     def deleteRecipe(self, id):  # josh
         for item in self.data:
