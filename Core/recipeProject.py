@@ -25,7 +25,7 @@ class Recipe:
 
 class RecipeManager:
     def __init__(self):
-        #initial recipes for development purposes
+        # initial recipes for development purposes
         recipe1 = Recipe(
             0,
             "McBurger",
@@ -38,17 +38,17 @@ class RecipeManager:
                 {"ingredientName": "secretPatty",
                     "quantity": 1, "measurement": "unit"},
                 {"ingredientName": "specialMayo",
-                    "quantity": 10, "measurement": "gram"},
+                    "quantity": 10, "measurement": "grams"},
                 {"ingredientName": "specialSauce",
-                    "quantity": 20, "measurement": "gram"},
-                {"ingredientName": "lettuce", "quantity": 8, "measurement": "gram"},
-                {"ingredientName": "tomato", "quantity": 8, "measurement": "gram"}
+                    "quantity": 20, "measurement": "grams"},
+                {"ingredientName": "lettuce", "quantity": 8, "measurement": "grams"},
+                {"ingredientName": "tomato", "quantity": 8, "measurement": "grams"}
             ],
             {
-                1: "Assemble the bun and the secret patty.",
-                2: "Spread special mayo and special sauce on the bun.",
-                3: "Add lettuce and tomato on top.",
-                4: "Cook the assembled burger for 12 minutes."
+                "1": "Assemble the bun and the secret patty.",
+                "2": "Spread special mayo and special sauce on the bun.",
+                "3": "Add lettuce and tomato on top.",
+                "4": "Cook the assembled burger for 12 minutes."
             }
         )
         recipe2 = Recipe(
@@ -129,11 +129,11 @@ class RecipeManager:
             }
         )
 
-        self.data = [recipe1,recipe2,recipe3]
+        self.data = [recipe1, recipe2, recipe3]
 
     def viewRecipeList(self):
         print("{:<3} {:<23} {:<12} {:<9} {:<9} {}".format(
-        "ID", "RecipeName", "RecipeAuthor", "PrepTime", "CookTime", "ServingSize"))
+            "ID", "RecipeName", "RecipeAuthor", "PrepTime", "CookTime", "ServingSize"))
         print("---------------------------------------------------------------------")
         for recipe in self.data:
             if len(recipe.recipe_name) >= 20:
@@ -143,7 +143,6 @@ class RecipeManager:
             else:
                 print("{:<3} {:<23} {:<12} {:<9} {:<9} {}".format(
                     recipe.id, recipe.recipe_name, recipe.recipe_author, recipe.prep_time, recipe.cook_time, recipe.serving_size))
-
 
     def addRecipe(self, recipe):  # fahad
         # this method should add a new recipe to the recipes list
@@ -187,13 +186,30 @@ class RecipeManager:
     def exportRecipes(self, filename="DefaultExportName"):  # sam
         # exports recipes to a .json file
 
+        mrJSON = []
+
+        for i in self.data:
+            mrJSON.append(
+                {
+                    "id": i.id,
+                    "recipeName": i.recipe_name,
+                    "recipeAuthor": i.recipe_author,
+                    "prepTime": i.prep_time,
+                    "cookTime": i.cook_time,
+                    "servingSize": i.serving_size,
+                    "ingredients": i.ingredients,
+                    "instructions": i.instructions
+                }
+            )
+
+        
         if not os.path.exists("Core/exports/"):
             os.makedirs("Core/exports/")
 
         filepath = "Core/exports/" + str(filename) + ".json"
         file = open(filepath, "w")
 
-        json.dump(self.data, file, indent=4)
+        json.dump(mrJSON, file, indent=4)
 
         file.close()
 
@@ -204,8 +220,6 @@ class RecipeManager:
 
     def importRecipes(self, filename):  # sam
         # imports recipes from a .json file
-
-        # filepath = "Core/exports/" + str(filename) + ".json"
 
         folder_path = 'Core/imports'
 
@@ -224,7 +238,13 @@ class RecipeManager:
 
         try:
             fileData = json.load(file)
-            self.data = fileData
+            importData = []
+            for i in fileData:
+                recipe = Recipe(i["id"],i["recipeName"],i["recipeAuthor"],i["prepTime"],i["cookTime"],i["servingSize"],i["ingredients"],i["instructions"])
+                importData.append(recipe)
+            
+            self.data = importData
+
             print('Imported ' + str(filename) + '.json from ' +
                   str(file_path) + ' successfully.')
             file.close()
@@ -235,28 +255,6 @@ class RecipeManager:
                 f'The selected JSON file "{filename}.json" is corrupted.')
 
 
-# recipe = Recipe(
-#     0,
-#     "McBurger",
-#     "Sam",
-#     10,
-#     12,
-#     1,
-#     [
-#         {"ingredientName": "bun", "quantity": 1, "measurement": "unit"},
-#         {"ingredientName": "secretPatty", "quantity": 1, "measurement": "unit"},
-#         {"ingredientName": "specialMayo", "quantity": 10, "measurement": "gram"},
-#         {"ingredientName": "specialSauce", "quantity": 20, "measurement": "gram"},
-#         {"ingredientName": "lettuce", "quantity": 8, "measurement": "gram"},
-#         {"ingredientName": "tomato", "quantity": 8, "measurement": "gram"}
-#     ],
-#     {
-#         1: "Assemble the bun and the secret patty.",
-#         2: "Spread special mayo and special sauce on the bun.",
-#         3: "Add lettuce and tomato on top.",
-#         4: "Cook the assembled burger for 12 minutes."
-#     }
-# )
 rm = RecipeManager()
 
 # rm.data = []
@@ -267,7 +265,7 @@ rm = RecipeManager()
 
 # rm.exportRecipes('objectTesting')
 
-rm.viewRecipeList()
+# rm.viewRecipeList()
 
 # rm.updateRecipe(
 #             id=0,
@@ -277,3 +275,7 @@ rm.viewRecipeList()
 #             new_cook_time=40,
 #             new_serving_size=5
 #         )
+
+# rm.exportRecipes()
+# rm.importRecipes('recipes')
+# rm.exportRecipes('new')
