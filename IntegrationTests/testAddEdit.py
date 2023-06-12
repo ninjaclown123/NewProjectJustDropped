@@ -2,7 +2,7 @@ import unittest
 from Core.recipeProject import RecipeManager, Recipe
 
 
-class RecipeManagerIntegrationTest(unittest.TestCase):
+class TestRecipeManagerIntegration(unittest.TestCase):
 
     def setUp(self):
         self.recipe_manager = RecipeManager()

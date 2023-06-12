@@ -2,7 +2,7 @@ import unittest
 from Core.recipeProject import RecipeManager, Recipe
 
 
-class RecipeManagerTests(unittest.TestCase):
+class TestRecipeManagement(unittest.TestCase):
 
     def setUp(self):
         # Create a RecipeManager instance for testing
