@@ -6,7 +6,7 @@ class TestRecipeManagement(unittest.TestCase):
     def test_add_recipe(self):
         rm = RecipeManager()
         newRecipe = Recipe(
-            30,
+            3,
             "Chocolate Chip Cookies",
             "Salmoan",
             20,
