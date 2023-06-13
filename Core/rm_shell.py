@@ -67,8 +67,8 @@ class RmMode(cmd.Cmd):
         pass
 
     def do_delete(self,arg):
-        'Help text'
-        pass
+        '\nDeletes a recipe from the memory using a provided ID.\n\tCommand: delete <id>.\n'
+        rm.delete(arg)
 
     def do_export(self, arg):
         '\nExport current recipe data in memory to a JSON file in Core/exports directory.If no filename argument is supplied, the JSON file will be exported with the default name.\n\tCommand: export <filename>.\n '
