@@ -167,6 +167,14 @@ class RecipeManager:
 
         raise ValueError("Recipe ID not found in the list of recipes.")
 
+    def viewSpecificRecipe(self, id):
+        for recipe in self.data:
+            if recipe.id == id:
+                return recipe
+
+        raise ValueError(f"Recipe with ID {id} not found.")
+
+
     def deleteRecipe(self, id):  # josh
         for item in self.data:
             if item.id == id:
