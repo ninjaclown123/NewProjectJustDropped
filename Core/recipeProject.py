@@ -147,37 +147,37 @@ class RecipeManager:
     def addRecipe(self, recipe):  # fahad
         # this method should add a new recipe to the recipes list
         for r in self.data:
-            if r["id"] == recipe["id"]:
+            if r.id == recipe.id:
                 raise Exception("Recipe with the same ID already exists!")
-            if r["recipeName"] == recipe["recipeName"]:
+            if r.recipe_name == recipe.recipe_name:
                 raise Exception("Recipe with the same name already exists!")
         self.data.append(recipe)
 
-    def updateRecipe(self, id, new_recipe_name=None, new_recipe_author=None, new_prep_time=None, new_cook_time=None,
-                     new_serving_size=None):
-        # Create a mapping from attribute names to new values
-        attributes_to_update = {
-            "recipeName": new_recipe_name,
-            "recipeAuthor": new_recipe_author,
-            "prepTime": new_prep_time,
-            "cookTime": new_cook_time,
-            "servingSize": new_serving_size
-        }
-
+    def editRecipe(self, newRecipe):
         for recipe in self.data:
-            if recipe["id"] == id:
-                # Only replace values if a new value is provided
-                for attribute, new_value in attributes_to_update.items():
-                    if new_value is not None:
-                        recipe[attribute] = new_value
-                return True
+            if recipe.id == newRecipe.id:
+                recipe.recipe_name = newRecipe.recipe_name or recipe.recipe_name
+                recipe.recipe_author = newRecipe.recipe_author or recipe.recipe_author
+                recipe.prep_time = newRecipe.prep_time or recipe.prep_time
+                recipe.cook_time = newRecipe.cook_time or recipe.cook_time
+                recipe.serving_size = newRecipe.serving_size or recipe.serving_size
+                recipe.ingredients = newRecipe.ingredients or recipe.ingredients
+                recipe.instructions = newRecipe.instructions or recipe.instructions
+                return
 
-        # Return False if the recipe was not found
-        return False
+        raise ValueError("Recipe ID not found in the list of recipes.")
+
+    def viewSpecificRecipe(self, id):
+        for recipe in self.data:
+            if recipe.id == id:
+                return recipe
+
+        raise ValueError(f"Recipe with ID {id} not found.")
+
 
     def deleteRecipe(self, id):  # josh
         for item in self.data:
-            if item["id"] == id:
+            if item.id == id:
                 self.data.remove(item)
                 return
 
@@ -255,11 +255,38 @@ class RecipeManager:
                 f'The selected JSON file "{filename}.json" is corrupted.')
 
 
-rm = RecipeManager()
+# rm = RecipeManager()
 
-# rm.data = []
+# # rm.data = []
+# # recipe1 = Recipe(
+# #             0,
+# #             "McBurger",
+# #             "Sam",
+# #             10,
+# #             12,
+# #             1,
+# #             [
+# #                 {"ingredientName": "bun", "quantity": 1, "measurement": "unit"},
+# #                 {"ingredientName": "secretPatty",
+# #                     "quantity": 1, "measurement": "unit"},
+# #                 {"ingredientName": "specialMayo",
+# #                     "quantity": 10, "measurement": "grams"},
+# #                 {"ingredientName": "specialSauce",
+# #                     "quantity": 20, "measurement": "grams"},
+# #                 {"ingredientName": "lettuce", "quantity": 8, "measurement": "grams"},
+# #                 {"ingredientName": "tomato", "quantity": 8, "measurement": "grams"}
+# #             ],
+# #             {
+# #                 "1": "Assemble the bun and the secret patty.",
+# #                 "2": "Spread special mayo and special sauce on the bun.",
+# #                 "3": "Add lettuce and tomato on top.",
+# #                 "4": "Cook the assembled burger for 12 minutes."
+# #             }
+# #         )
+# # # rm.addRecipe(recipe1)
+# # # rm.addRecipe(recipe1)
 
-# rm.addRecipe(recipe)
+
 
 # print(rm.data)
 

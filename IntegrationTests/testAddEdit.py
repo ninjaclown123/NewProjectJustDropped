@@ -1,45 +1,83 @@
 import unittest
-
-from Core.recipeProject import RecipeManager
+from Core.recipeProject import RecipeManager, Recipe
 
 
 class TestRecipeManagerIntegration(unittest.TestCase):
 
-    def test_add_and_update_recipe(self):
-        rm = RecipeManager()
+    def setUp(self):
+        self.recipe_manager = RecipeManager()
 
-        new_recipe = {
-            "id": 3,
-            "recipeName": "Alfredo Pasta",
-            "recipeAuthor": "seiffdene",
-            "prepTime": 5,
-            "cookTime": 10,
-            "servingSize": 2,
-            "ingredients": [
-                {"ingredientName": "chicken", "quantity": 1, "measurement": "kg"},
-                {"ingredientName": "alfredo sauce", "quantity": 2, "measurement": "ounce"},
+    def test_addRecipe_and_editRecipe(self):
+        # Create a new recipe
+        new_recipe = Recipe(
+            3,
+            "New Recipe",
+            "John",
+            30,
+            45,
+            2,
+            [
+                {"ingredientName": "ingredient1", "quantity": 1, "measurement": "unit"},
+                {"ingredientName": "ingredient2", "quantity": 2, "measurement": "units"}
             ],
-            "instructions": {
-                "1": "Add the chicken.",
-                "2": "Add the alfredo sauce.",
-            }
-        }
+            {"1": "Step 1", "2": "Step 2"}
+        )
 
-        # Test adding the new recipe
-        rm.addRecipe(new_recipe)
-        self.assertEqual(len(rm.data), 4)
-        self.assertEqual(rm.data[-1]['recipeName'], "Alfredo Pasta")
+        # Add the recipe to the recipe manager
+        self.recipe_manager.addRecipe(new_recipe)
 
-        # Test updating the recipe
-        updated = rm.updateRecipe(3, new_recipe_name="lemon chicken pasta", new_recipe_author="Samson",
-                                  new_prep_time=6, new_cook_time=11, new_serving_size=3)
-        self.assertTrue(updated)
-        self.assertEqual(rm.data[-1]['recipeName'], "lemon chicken pasta")
-        self.assertEqual(rm.data[-1]['recipeAuthor'], "Samson")
-        self.assertEqual(rm.data[-1]['prepTime'], 6)
-        self.assertEqual(rm.data[-1]['cookTime'], 11)
-        self.assertEqual(rm.data[-1]['servingSize'], 3)
+        # Retrieve the added recipe from the recipe manager
+        added_recipe = self.recipe_manager.data[3]
+
+        # Check that the added recipe has the correct values
+        self.assertEqual(added_recipe.id, 3)
+        self.assertEqual(added_recipe.recipe_name, "New Recipe")
+        self.assertEqual(added_recipe.recipe_author, "John")
+        self.assertEqual(added_recipe.prep_time, 30)
+        self.assertEqual(added_recipe.cook_time, 45)
+        self.assertEqual(added_recipe.serving_size, 2)
+        self.assertEqual(added_recipe.ingredients, [
+            {"ingredientName": "ingredient1", "quantity": 1, "measurement": "unit"},
+            {"ingredientName": "ingredient2", "quantity": 2, "measurement": "units"}
+        ])
+        self.assertEqual(added_recipe.instructions, {"1": "Step 1", "2": "Step 2"})
+
+        # Modify the added recipe
+        modified_recipe = Recipe(
+            3,
+            "Modified Recipe",
+            "Jane",
+            60,
+            90,
+            4,
+            [
+                {"ingredientName": "ingredient3", "quantity": 3, "measurement": "cups"},
+                {"ingredientName": "ingredient4", "quantity": 4, "measurement": "tbsp"}
+            ],
+            {"1": "Step 1", "2": "Step 2", "3": "Step 3"}
+        )
+
+        # Edit the recipe in the recipe manager
+        self.recipe_manager.editRecipe(modified_recipe)
+
+        # Retrieve the modified recipe from the recipe manager
+        modified_recipe = self.recipe_manager.data[3]
+
+        # Check that the modified recipe has the updated values
+        self.assertEqual(modified_recipe.recipe_name, "Modified Recipe")
+        self.assertEqual(modified_recipe.recipe_author, "Jane")
+        self.assertEqual(modified_recipe.prep_time, 60)
+        self.assertEqual(modified_recipe.cook_time, 90)
+        self.assertEqual(modified_recipe.serving_size, 4)
+        self.assertEqual(modified_recipe.ingredients, [
+            {"ingredientName": "ingredient3", "quantity": 3, "measurement": "cups"},
+            {"ingredientName": "ingredient4", "quantity": 4, "measurement": "tbsp"}
+        ])
+        self.assertEqual(modified_recipe.instructions, {"1": "Step 1", "2": "Step 2", "3": "Step 3"})
+
+    def tearDown(self):
+        self.recipe_manager = None
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
