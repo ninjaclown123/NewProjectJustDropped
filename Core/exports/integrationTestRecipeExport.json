@@ -1,0 +1,109 @@
+[
+    {
+        "id": 0,
+        "recipeName": "Banana Milkshake",
+        "recipeAuthor": "Samuel",
+        "prepTime": 5,
+        "cookTime": 1,
+        "servingSize": 2,
+        "ingredients": [
+            {
+                "ingredientName": "ice cube",
+                "quantity": 3,
+                "measurement": "unit"
+            },
+            {
+                "ingredientName": "milk",
+                "quantity": 1,
+                "measurement": "cup"
+            },
+            {
+                "ingredientName": "banana",
+                "quantity": 1,
+                "measurement": "unit"
+            },
+            {
+                "ingredientName": "white sugar",
+                "quantity": 1,
+                "measurement": "tbsp"
+            },
+            {
+                "ingredientName": "ground cinnamon",
+                "quantity": 1,
+                "measurement": "pinch"
+            }
+        ],
+        "instructions": {
+            "1": "Gather all ingredients.",
+            "2": "Combine ice, milk, banana, sugar, and cinnamon in a blender; blend until smooth."
+        }
+    },
+    {
+        "id": 1,
+        "recipeName": "Spaghetti Bolognese",
+        "recipeAuthor": "Fehd",
+        "prepTime": 15,
+        "cookTime": 30,
+        "servingSize": 4,
+        "ingredients": [
+            {
+                "ingredientName": "spaghetti",
+                "quantity": 250,
+                "measurement": "grams"
+            },
+            {
+                "ingredientName": "ground beef",
+                "quantity": 500,
+                "measurement": "grams"
+            },
+            {
+                "ingredientName": "onion",
+                "quantity": 1,
+                "measurement": "units"
+            },
+            {
+                "ingredientName": "garlic",
+                "quantity": 2,
+                "measurement": "grams"
+            },
+            {
+                "ingredientName": "tomato sauce",
+                "quantity": 400,
+                "measurement": "grams"
+            },
+            {
+                "ingredientName": "tomato paste",
+                "quantity": 2,
+                "measurement": "tablespoons"
+            },
+            {
+                "ingredientName": "olive oil",
+                "quantity": 2,
+                "measurement": "tablespoons"
+            },
+            {
+                "ingredientName": "dried oregano",
+                "quantity": 1,
+                "measurement": "teaspoon"
+            },
+            {
+                "ingredientName": "salt",
+                "quantity": 1,
+                "measurement": "teaspoon"
+            },
+            {
+                "ingredientName": "black pepper",
+                "quantity": 1,
+                "measurement": "teaspoon"
+            }
+        ],
+        "instructions": {
+            "1": "Cook spaghetti according to package instructions.",
+            "2": "In a separate pan, heat olive oil and saut\u00e9 onion and garlic until translucent.",
+            "3": "Add ground beef and cook until browned.",
+            "4": "Stir in tomato sauce and tomato paste. Simmer for 10 minutes.",
+            "5": "Season with dried oregano, salt, and black pepper.",
+            "6": "Serve the Bolognese sauce over cooked spaghetti."
+        }
+    }
+]
