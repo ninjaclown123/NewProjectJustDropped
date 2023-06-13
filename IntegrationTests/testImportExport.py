@@ -14,7 +14,7 @@ class TestRecipeManagerIntegration(unittest.TestCase):
         recipe1 = Recipe(
             0,
             "McBurger",
-            "Sem",
+            "Sam",
             10,
             12,
             1,

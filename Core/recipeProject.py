@@ -29,7 +29,7 @@ class RecipeManager:
         recipe1 = Recipe(
             0,
             "McBurger",
-            "Sem",
+            "Sam",
             10,
             12,
             1,
