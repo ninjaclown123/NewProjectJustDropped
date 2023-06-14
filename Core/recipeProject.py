@@ -179,6 +179,7 @@ class RecipeManager:
         for item in self.data:
             if item.id == id:
                 self.data.remove(item)
+                print(item.recipe_name, "has been deleted.")
                 return
 
         print("ID not found in the list of recipes.")
