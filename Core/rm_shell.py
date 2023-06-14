@@ -69,7 +69,8 @@ class RmMode(cmd.Cmd):
     def do_delete(self,arg):
         '\nWipes a recipe from the memory.\n\tCommand: delete <id>.\n'
         if arg:
-            rm.deleteRecipe(arg)
+            if arg.isnumeric():
+                rm.deleteRecipe(int(arg))
         else:
             print("\tCommand: delete <id>.\n")
 
