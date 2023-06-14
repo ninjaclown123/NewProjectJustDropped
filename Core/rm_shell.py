@@ -71,8 +71,8 @@ class RmMode(cmd.Cmd):
         if arg:
             if arg.isnumeric():
                 rm.deleteRecipe(int(arg))
-        else:
-            print("\tCommand: delete <id>.\n")
+                return
+        print("\tCommand: delete <id>.\n")
 
     def do_export(self, arg):
         '\nExport current recipe data in memory to a JSON file in Core/exports directory.If no filename argument is supplied, the JSON file will be exported with the default name.\n\tCommand: export <filename>.\n '
