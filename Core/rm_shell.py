@@ -58,9 +58,65 @@ class RmMode(cmd.Cmd):
         pass
 
     def do_add(self,arg):
-        'Help text'
+        '\nAdds a recipe to recipes list. \n\tCommand: add'
+
+        if arg:
+            print('Add command does not take any arguments.')
+            return
+        
         lst = ['Recipe Name', 'Recipe Author', 'Preperation time','Cook time','Serving Size', 'Ingredients','Instructions']
-        pass
+        dic = {'Ingredients':[],'Recipe Name':None, 'Recipe Author':None, 'Preperation time':None,'Cook time':None,'Serving Size':None, 'Instructions':{}}
+        for i in dic.keys():
+
+            
+            
+            if i == "Ingredients":
+                print('Enter ' + i + ' (enter "exit" to cancel operation.)')
+
+                while True:
+                    try:
+                        num = input('\t>>> How many ingredients do you want to enter? ')
+                        num = int(num)
+                        if 0 < num < 20:
+                            break
+                        else:
+                            print('Please enter an integer greater than 0 but less than 20.')
+                    except ValueError:
+                        print('Please enter a valid integer greater than 0 but less than 20.')
+                    
+
+                for j in range(int(num)):
+                    
+                    temp = {}
+                    print('Entering Ingredient ' + str(j))
+
+                    for k in ['ingredientName','quantity','measurement']:
+                        user_input = input('\t>>> Enter ' + k + ': ')
+
+                        if user_input == "exit":
+                            print('\t>>>Nothing was added to the Recipe Manager.')
+                            print(dic)
+                            return
+
+                        temp[k] = user_input
+                    dic[i].append(temp) 
+
+
+            elif i == "Instructions":
+                pass
+
+            else:
+                print('Enter ' + i + ' (enter "exit" to cancel adding recipes)')
+                user_input = input('\t>>> ')
+
+                if user_input == "exit":
+                    print('Nothing was added to the Recipe Manager.')
+                    print(dic)
+                    return
+
+                dic[i] = user_input
+
+        print(dic)
 
     def do_edit(self,arg):
         'Help text'
