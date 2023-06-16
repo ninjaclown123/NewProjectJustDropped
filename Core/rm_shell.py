@@ -127,7 +127,6 @@ class RmMode(cmd.Cmd):
 
                         if num == "exit":
                             print('\t>>> Nothing was added to the Recipe Manager.')
-                            print(dic)
                             return
 
                         num = int(num)
@@ -232,7 +231,6 @@ class RmMode(cmd.Cmd):
 
                 if user_input == "exit":
                     print('Nothing was added to the Recipe Manager.')
-                    print(dic)
                     return
 
                 dic[i] = user_input
@@ -308,7 +306,14 @@ class RmMode(cmd.Cmd):
             print('Recipe Manager memory cleared successfully.')
             print(rm.data)
         else:
-            print('WARNING: Are you sure you want to clear Recipe Manager\'s data? (y/n)')
+            print('\tWARNING: Are you sure you want to clear Recipe Manager\'s data? (y/n)')
+            user_input = input('\t>>>')
+            if user_input == 'y':
+                rm.data = []
+                print('\tRecipe Manager memory cleared successfully.')
+            else:
+                print('\tClear memory operation cancelled')
+
 
 
 
