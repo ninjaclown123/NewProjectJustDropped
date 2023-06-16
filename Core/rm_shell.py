@@ -83,10 +83,25 @@ class RmMode(cmd.Cmd):
     prompt = 'RmMode> '
 
     def do_view(self,arg):
-        'Type in "view all" to view all the recipes OR type "view <id>" to view specific id!'
+        'Type in "view all" to view all the recipes OR type "view <id>" to view specific id! \nPrint a sorted list of recipes by recipe_name or recipe_author: \nview sort recipe_name \n view sort recipe_author'
         arg = str(arg)
         check = True
         if arg:
+            args = arg.split()
+            if args[0] == 'sort':
+                if len(args) < 2:
+                    print('Sort argument not supplied! Consult manual: help view')
+                    return
+                
+                if args[1] not in ['recipe_name' , 'recipe_author']:
+                    print('Sort argument not supplied! Consult manual: help view')
+                    return
+                
+                if args[1] == 'recipe_name':
+                    print('sorted by recipe name')
+                if args[1] == 'recipe_author':
+                    print('sorted by recipe author')
+
             if arg.upper()=='ALL':
                 rm.viewRecipeList()
             else:
