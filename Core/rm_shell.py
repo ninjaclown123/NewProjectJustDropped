@@ -83,8 +83,28 @@ class RmMode(cmd.Cmd):
     prompt = 'RmMode> '
 
     def do_view(self,arg):
-        'Help text'
-        pass
+        'Type in "view all" to view all the recipes OR type "view <id>" to view specific id!'
+        arg = str(arg)
+        check = True
+        if arg:
+            if arg.upper()=='ALL':
+                rm.viewRecipeList()
+            else:
+                for i in arg:
+                    if(i.isdigit()==False):
+                        check = False
+                        print("Please enter either 'ALL' to view all recipes OR a proper ID to view specific recipe!")
+                        break
+                if check==True:
+                    try:
+                        arg = int(arg)
+                        rec = rm.viewSpecificRecipe(arg)
+                        print(rec)
+                    except Exception as err:
+                        print(err)
+                    
+        else:
+            print("Please enter a proper argument to process. You can type 'help view' for details.")
 
     def do_add(self,arg):
         '\nAdds a recipe to recipes list. \n\tCommand: add'
@@ -249,8 +269,12 @@ class RmMode(cmd.Cmd):
         pass
 
     def do_delete(self,arg):
-        'Help text'
-        pass
+        '\nWipes a recipe from the memory.\n\tCommand: delete <id>.\n'
+        if arg:
+            if arg.isnumeric():
+                rm.deleteRecipe(int(arg))
+                return
+        print("\tCommand: delete <id>.\n")
 
     def do_export(self, arg):
         '\nExport current recipe data in memory to a JSON file in Core/exports directory.If no filename argument is supplied, the JSON file will be exported with the default name.\n\tCommand: export <filename>.\n '
