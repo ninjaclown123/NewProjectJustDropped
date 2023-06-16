@@ -124,7 +124,6 @@ class RmMode(cmd.Cmd):
                     temp = {}
                     print('\t>>> Entering Ingredient ' + str(j+1))
 
-                    tempdic = {'measurement': 'measurement '}
                     for k in ['ingredientName','measurement','quantity']:
                         user_input = input('\t>>>    Enter ' + ((k + ' (in grams,kilograms, etc)') if (k=='measurement') else k) +  ': ')
 
