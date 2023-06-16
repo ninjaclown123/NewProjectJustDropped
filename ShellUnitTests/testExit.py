@@ -17,6 +17,7 @@ class YourCmdTestCase(unittest.TestCase):
     def setUp(self):
         # Initialize an instance of YourCmdClass for testing
         self.RmMode = RmMode()
+        
 
     @patch('builtins.print')
     def test_exit(self, mock_print):
@@ -25,3 +26,5 @@ class YourCmdTestCase(unittest.TestCase):
         self.assertTrue(result)
 
         mock_print.assert_called_with('Thank you for using Recipe Manager!')
+
+        

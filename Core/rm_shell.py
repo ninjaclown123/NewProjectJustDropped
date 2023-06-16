@@ -46,6 +46,35 @@ def validate_windows_file_name(file_name):
 
     return True
 
+def validate_quantity(quantity):
+    try:
+        quantity = int(quantity)
+        if quantity > 0:
+            return True
+        else:
+            return False
+    except ValueError:
+        return False
+
+def validate_ingredientname(ingredientName):
+    if (
+        len(ingredientName) <= 20
+        and len(ingredientName) > 0
+        and not ingredientName.isnumeric()
+    ):
+        return True
+    else:
+        return False
+    
+def validate_measurement(unit):
+    if (
+        len(unit) <= 20
+        and len(unit) > 0
+        and not unit.isnumeric()
+    ):
+        return True
+    else:
+        return False
 
 rm = RecipeManager()
 
@@ -64,50 +93,123 @@ class RmMode(cmd.Cmd):
             print('Add command does not take any arguments.')
             return
         
-        lst = ['Recipe Name', 'Recipe Author', 'Preperation time','Cook time','Serving Size', 'Ingredients','Instructions']
-        dic = {'Ingredients':[],'Recipe Name':None, 'Recipe Author':None, 'Preperation time':None,'Cook time':None,'Serving Size':None, 'Instructions':{}}
+        dic = {'Recipe Name':None, 'Recipe Author':None, 'Preparation time':None,'Cook time':None,'Serving Size':None,'Ingredients':[], 'Instructions':{}}
+
+        print('You are now adding a recipe (enter "exit" to cancel operation)')
         for i in dic.keys():
 
-            
-            
             if i == "Ingredients":
-                print('Enter ' + i + ' (enter "exit" to cancel operation.)')
+                print('>>> Enter ' + i + ': ')
 
                 while True:
                     try:
                         num = input('\t>>> How many ingredients do you want to enter? ')
+
+                        if num == "exit":
+                            print('\t>>> Nothing was added to the Recipe Manager.')
+                            print(dic)
+                            return
+
                         num = int(num)
                         if 0 < num < 20:
                             break
                         else:
-                            print('Please enter an integer greater than 0 but less than 20.')
+                            print('\t>>> Please enter an integer greater than 0 but less than 20.')
                     except ValueError:
-                        print('Please enter a valid integer greater than 0 but less than 20.')
+                        print('\t>>> Please enter a valid integer greater than 0 but less than 20.')
                     
 
                 for j in range(int(num)):
                     
                     temp = {}
-                    print('Entering Ingredient ' + str(j))
+                    print('\t>>> Entering Ingredient ' + str(j+1))
 
-                    for k in ['ingredientName','quantity','measurement']:
-                        user_input = input('\t>>> Enter ' + k + ': ')
+                    tempdic = {'measurement': 'measurement '}
+                    for k in ['ingredientName','measurement','quantity']:
+                        user_input = input('\t>>>    Enter ' + ((k + ' (in grams,kilograms, etc)') if (k=='measurement') else k) +  ': ')
 
                         if user_input == "exit":
-                            print('\t>>>Nothing was added to the Recipe Manager.')
+                            print('\t>>> Nothing was added to the Recipe Manager.')
                             print(dic)
                             return
+                        
+                        if k == 'ingredientName':
+                            if validate_ingredientname(user_input) == False:
+                                while validate_ingredientname(user_input) == False:
+                                    user_input = input('\t>>>    Enter a valid ' + k + ': ')
+                        
+                        if k == 'measurement':
+                            if validate_measurement(user_input) == False:
+                                while validate_measurement(user_input) == False:
+                                    user_input = input('\t>>>    Enter a valid ' + k + ': ')
+
+                        if k == 'quantity':
+                            if validate_quantity(user_input) == False:
+                                while validate_quantity(user_input) == False:
+                                    user_input = input('\t>>>    Enter a valid ' + k + ': ')
+                                    
+                                    
 
                         temp[k] = user_input
                     dic[i].append(temp) 
 
 
             elif i == "Instructions":
-                pass
+                temp = {}
+                print('\t>>> Enter instructions: ')
+                print('\t>>> \tCharacter limit for each instruction: 100')
+
+
+                while True:
+                    try:
+                        num = input('\t>>> How many instructions do you want to enter? ')
+                        num = int(num)
+                        if 0 < num < 20:
+                            break
+                        else:
+                            print('\t>>> Please enter an integer greater than 0 but less than 20.')
+                    except ValueError:
+                        print('\t>>> Please enter a valid integer greater than 0 but less than 20.')
+                
+                j = 0
+                while j < num:
+                    user_input = input('\t>>> Enter instruction ' + str(j+1) + ': ')
+                    temp[str(j+1)] = user_input
+                    if len(user_input) > 100 or len(user_input) == 0:
+                        print('\t>>> Instruction should be between 0 and 100 characters long')
+                        continue
+                    j += 1
+                
+                dic['Instructions'] = temp
+
 
             else:
-                print('Enter ' + i + ' (enter "exit" to cancel adding recipes)')
+                print('\t>>> Enter ' + i + ' (enter "exit" to cancel adding recipes)')
                 user_input = input('\t>>> ')
+
+                if i == 'Recipe Name':
+                    if validate_ingredientname(user_input) == False:
+                        while validate_ingredientname(user_input) == False:
+                            user_input = input('\t>>> Enter a valid Recipe Name: ')
+                if i == 'Recipe Author':
+                    if validate_ingredientname(user_input) == False:
+                        while validate_ingredientname(user_input) == False:
+                            user_input = input('\t>>> Enter a valid Recipe Author: ')
+                if i == 'Preparation time':
+                    if validate_quantity(user_input) == False:
+                        while validate_quantity(user_input) == False:
+                            user_input = input('\t>>> Enter a valid Preparation time: ')
+                
+                if i == 'Cook time':
+                    if validate_quantity(user_input) == False:
+                        while validate_quantity(user_input) == False:
+                            user_input = input('\t>>> Enter a valid Cook time: ')
+                
+                if i == 'Serving Size':
+                    if validate_quantity(user_input) == False:
+                        while validate_quantity(user_input) == False:
+                            user_input = input('\t>>> Enter a valid Serving Size: ')
+                
 
                 if user_input == "exit":
                     print('Nothing was added to the Recipe Manager.')
@@ -116,7 +218,32 @@ class RmMode(cmd.Cmd):
 
                 dic[i] = user_input
 
-        print(dic)
+        print('\n')
+        for i in dic:
+            print(dic[i])
+
+        print('\n\t>>>Do you want to add this recipe to Recipe Manager? y/n')
+
+        user_input = input('\t>>>')
+
+        if user_input not in ['y','n']:
+            while user_input not in ['y','n']:
+                print('\t>>>Do you want to add this recipe to Recipe Manager? y/n')
+                user_input = input('\t>>>')
+        
+        if user_input == 'y':
+            temp = sorted(rm.data, key = lambda x: x.id)
+            
+            if len(temp) == 0:
+                id = 0
+            else:
+                id = temp[-1].id
+
+            rm.addRecipe(Recipe(id+1,dic['Recipe Name'],dic['Recipe Author'],dic['Preparation time'],dic['Cook time'],dic['Serving Size'],dic['Ingredients'],dic['Instructions']))
+            print('\t>>>' + dic['Recipe Name'] + ' by ' + dic['Recipe Author'] + ' added to Recipe Manager.')
+
+        if user_input == 'n':
+            print('\t>>>Nothing was added to the Recipe Manager.')
 
     def do_edit(self,arg):
         'Help text'
@@ -150,6 +277,17 @@ class RmMode(cmd.Cmd):
                 arg = arg[:-5]
 
             rm.importRecipes(arg)
+
+    def do_clear(self,arg):
+        '\nClears Recipe Manager\'s memory. \n\t Command: clear  \n Optional Argument: --f forces the clear without y/n \n'
+        if arg == '--f':
+            rm.data = []
+            print('Recipe Manager memory cleared successfully.')
+            print(rm.data)
+        else:
+            print('WARNING: Are you sure you want to clear Recipe Manager\'s data? (y/n)')
+
+
 
     def do_exit(self,arg):
         'Exits RmMode shell. \n\tCommand: exit\n'
