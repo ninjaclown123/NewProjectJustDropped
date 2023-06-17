@@ -1,5 +1,11 @@
 import os
+import subprocess
+import threading
 import sys
+from typing import IO
+from app import app
+from werkzeug.serving import make_server
+
 
 # Get the absolute path of the directory containing this script
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -81,6 +87,15 @@ rm = RecipeManager()
 class RmMode(cmd.Cmd):
     intro = 'Welcome to Recipe Manager!'
     prompt = 'RmMode> '
+    
+    # def __init__(self):
+    #     self.gui_status = False
+    def __init__(self, completekey: str = "tab", stdin: IO[str] | None = None, stdout: IO[str] | None = None) -> None:
+        super().__init__(completekey, stdin, stdout)
+        self.gui_status = False
+        self.server_thread = None
+        self.server = None
+
 
     def do_view(self,arg):
         'Type in "view all" to view all the recipes OR type "view <id>" to view specific id! \nPrint a sorted list of recipes by recipe_name or recipe_author: \nview sort recipe_name \n view sort recipe_author'
@@ -329,6 +344,50 @@ class RmMode(cmd.Cmd):
             else:
                 print('\tClear memory operation cancelled')
 
+    def do_gui(self, arg):
+        if arg == 'activate':
+            if not self.gui_status:
+                self.start_server()
+                self.gui_status = True
+                print('GUI activated successfully.')
+                return
+            else:
+                print('GUI is active.')
+
+        elif arg == 'deactivate':
+            if self.gui_status:
+                self.server.shutdown()
+                self.server_thread.join()
+                self.server_thread = None
+                self.gui_status = False
+                print('GUI deactivated successfully.')
+                return
+            else:
+                print('GUI is inactive.')
+                return
+        else:
+            print('Invalid argument provided. Consult manual: help gui')
+
+    def start_server(self):
+        if self.gui_status:
+            print('GUI is active.')
+            return
+        else:
+            # server = make_server('127.0.0.1', 5000, app)
+            # server.serve_forever()
+
+            self.server = make_server('127.0.0.1', 5000, app)
+            self.server_thread = threading.Thread(target=self.server.serve_forever)
+            self.server_thread.start()
+
+
+        
+
+    def run_flask_app(self):
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        python_path = os.path.join(base_dir, 'venv', 'Scripts', 'python.exe')
+        script_path = os.path.join(base_dir, 'app.py')
+        subprocess.run([python_path, script_path])
 
 
 

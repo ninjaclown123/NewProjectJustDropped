@@ -143,7 +143,10 @@ class RecipeManager:
             else:
                 print("{:<3} {:<23} {:<12} {:<9} {:<9} {}".format(
                     recipe.id, recipe.recipe_name, recipe.recipe_author, recipe.prep_time, recipe.cook_time, recipe.serving_size))
-
+    
+    def RecipeList(self):
+        return self.data
+        
     def addRecipe(self, recipe):  # fahad
         # this method should add a new recipe to the recipes list
         for r in self.data:

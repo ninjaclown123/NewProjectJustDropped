@@ -1,0 +1,41 @@
+<!-- viewID.html -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Recipe Details</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        /* Add your custom CSS styles here */
+    </style>
+</head>
+
+<body>
+    <h1>Recipe Name: {{ recipe.recipe_name }}</h1>
+    <p><strong>Author:</strong> {{ recipe.recipe_author }}</p>
+    <p><strong>Preparation Time:</strong> {{ recipe.prep_time }} minutes</p>
+    <p><strong>Cook Time:</strong> {{ recipe.cook_time }} minutes</p>
+    <p><strong>Serving Size:</strong> {{ recipe.serving_size }}</p>
+    <h2>Ingredients:</h2>
+    <ul>
+        {% for ingredient in recipe.ingredients %}
+        <li>{{ ingredient.ingredientName }}: {{ ingredient.quantity }} {{ ingredient.measurement }}</li>
+        {% endfor %}
+    </ul>
+    <h2>Instructions:</h2>
+    <ol>
+        {% for step, instruction in recipe.instructions.items() %}
+        <li>{{ step }}. {{ instruction }}</li>
+        {% endfor %}
+    </ol>
+
+    <h1>
+        <a href="/">
+            Home
+        </a>
+    </h1>
+</body>
+
+</html>
