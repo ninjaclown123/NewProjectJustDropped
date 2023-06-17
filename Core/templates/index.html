@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Recipe Manager</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        /* body {
+            background-color: skyblue;
+        } */
+    </style>
+</head>
+
+<body>
+    <h1 style="text-align: center;">Welcome to Reci.py Manager</h1>
+
+    <h2 style="text-align: center;">Recipe List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    <a href="/sortID">
+                        ID
+                    </a>
+                </th>
+                <th>
+                    <a href="/sortRecipeName">
+                        Recipe Name
+                    </a>
+                </th>
+                <th>
+                    <a href="/sortRecipeAuthor">
+                        Recipe Author
+                    </a>
+                </th>
+                <th>Prep Time</th>
+                <th>Cook Time</th>
+                <th>
+                    <a href="/sortTotalTime">
+                        Total Time
+                    </a>
+                </th>
+                <th>
+                    <a href="/sortServingSize">
+                        Serving Size
+                    </a>
+                </th>
+                <th>Operations</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for recipe in recipe_list %}
+            <tr>
+                <td>{{ recipe.id }}</td>
+                <td>
+
+
+                    {{ recipe.recipe_name }}
+
+
+                </td>
+                <td>{{ recipe.recipe_author }}</td>
+                <td>{{ recipe.prep_time }}</td>
+                <td>{{ recipe.cook_time }}</td>
+                <td>{{ recipe.prep_time + recipe.cook_time }}</td>
+                <td>{{ recipe.serving_size }}</td>
+                <td>
+                    <a href="/view/{{recipe.id}}">View</a>
+                    <a href="/edit/{{recipe.id}}">Edit</a>
+                    <a href="#">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div style="display: flex; justify-content: center; margin-top: 100px;">
+        <button onclick="location.href = '/add';" style="margin: 0 10px;height: 30px;width: 70px;">Add</button>
+        <button style="margin: 0 10px;height: 30px;width: 70px;">Export</button>
+        <button style="margin: 0 10px;height: 30px;width: 70px;">Import</button>
+    </div>
+</body>
+
+</html>
