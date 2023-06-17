@@ -101,7 +101,17 @@ class RmMode(cmd.Cmd):
                 if args[1] == 'recipe_name':
                     print('sorted by recipe name')
                 if args[1] == 'recipe_author':
-                    print('sorted by recipe author')
+                    my_recipes = rm.data.copy()
+                    my_sorted = sorted(my_recipes, key=lambda x: x.recipe_author)
+
+                    # temporarily sort the data, then print it.
+                    rm.data = my_sorted
+                    print('Sorted by recipe author.\n')
+                    rm.viewRecipeList()
+
+                    # unsort the data.
+                    rm.data = my_recipes
+                    return
 
             if arg.upper()=='ALL':
                 rm.viewRecipeList()
