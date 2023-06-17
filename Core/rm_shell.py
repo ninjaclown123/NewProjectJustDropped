@@ -1,3 +1,4 @@
+import copy
 import os
 import sys
 
@@ -287,9 +288,122 @@ class RmMode(cmd.Cmd):
         if user_input == 'n':
             print('\t>>>Nothing was added to the Recipe Manager.')
 
-    def do_edit(self,arg):
-        'Help text'
-        pass
+    def do_edit(self, arg):
+        'Edit a recipe in Recipe Manager. Command: edit <id>'
+        if arg:
+            if arg.isnumeric():
+                recipe_id = int(arg)
+                recipe = rm.viewSpecificRecipe(recipe_id)
+                if recipe:
+                    # Display the current recipe details
+                    print(f"Editing Recipe: {recipe.recipe_name}")
+                    print("Current Details:")
+                    # Print the current details of the recipe
+                    print(recipe)
+
+                    # Prompt the user for new details
+                    print("Enter new details (enter 'exit' to cancel):")
+                    new_recipe = copy.deepcopy(recipe)  # Create a deep copy of the recipe to store the updated details
+
+                    # Prompt the user for each field of the recipe and update it accordingly
+                    for field in new_recipe.__dict__.keys():
+                        if field == 'id':
+                            continue
+                        elif field == 'ingredients':
+                            print("Enter new ingredients:")
+                            new_ingredients = []
+                            while True:
+                                ingredient_name = input("Ingredient Name: ")
+                                if ingredient_name == 'exit':
+                                    break
+
+                                measurement = input("Measurement: ")
+                                if measurement == 'exit':
+                                    break
+
+                                quantity = input("Quantity: ")
+                                if quantity == 'exit':
+                                    break
+
+                                if (
+                                        validate_ingredientname(ingredient_name)
+                                        and validate_measurement(measurement)
+                                        and validate_quantity(quantity)
+                                ):
+                                    new_ingredients.append(
+                                        {
+                                            'ingredientName': ingredient_name,
+                                            'measurement': measurement,
+                                            'quantity': quantity
+                                        }
+                                    )
+                                else:
+                                    print("Invalid ingredient details. Please try again.")
+
+                            new_recipe.ingredients = new_ingredients
+                        elif field == 'instructions':
+                            print("Enter new instructions:")
+                            new_instructions = {}
+                            while True:
+                                instruction_number = input("Instruction Number: ")
+                                if instruction_number == 'exit':
+                                    break
+
+                                instruction_text = input("Instruction Text: ")
+                                if instruction_text == 'exit':
+                                    break
+
+                                if (
+                                        instruction_number.isnumeric()
+                                        and 0 < int(instruction_number) <= 20
+                                        and 0 < len(instruction_text) <= 100
+                                ):
+                                    new_instructions[instruction_number] = instruction_text
+                                else:
+                                    print("Invalid instruction details. Please try again.")
+                            new_recipe.instructions = new_instructions
+                        else:
+                            user_input = input(f"{field}: ")
+                            if user_input == 'exit':
+                                break
+
+                            if field == 'recipe_name' and not validate_ingredientname(user_input):
+                                print("Invalid recipe name. Please try again.")
+                                continue
+
+                            if field == 'preparation_time' and not validate_quantity(user_input):
+                                print("Invalid preparation time. Please try again.")
+                                continue
+
+                            if field == 'cook_time' and not validate_quantity(user_input):
+                                print("Invalid cook time. Please try again.")
+                                continue
+
+                            if field == 'serving_size' and not validate_quantity(user_input):
+                                print("Invalid serving size. Please try again.")
+                                continue
+
+                            setattr(new_recipe, field, user_input)
+
+                    # After updating the recipe, display the updated details
+                    print("Updated Details:")
+                    print(new_recipe)
+
+                    # Ask the user if they want to save the changes
+                    print("Save changes? (y/n)")
+                    user_input = input(">>> ")
+                    if user_input.lower() == 'y':
+                        # Update the recipe in the Recipe Manager
+                        rm.editRecipe(new_recipe)
+                        print("Recipe updated successfully.")
+                    else:
+                        print("Changes discarded.")
+                else:
+                    print("Recipe not found.")
+            else:
+                print("Invalid recipe ID.")
+        else:
+            print("Command: edit <id>")
 
     def do_delete(self,arg):
         '\nWipes a recipe from the memory.\n\tCommand: delete <id>.\n'
