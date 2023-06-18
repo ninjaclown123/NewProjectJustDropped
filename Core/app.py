@@ -1,6 +1,7 @@
-from flask import Flask, render_template, flash
+from flask import Flask, render_template, redirect, url_for
 from Core.recipeProject import RecipeManager
-import logging
+import logging, json
+from tkinter import Tk, filedialog
 
 app = Flask(__name__)
 
@@ -79,9 +80,22 @@ def sortRecipeServingSize():
     recipe_list = sorted(rm.RecipeList(), key = lambda x: (x.serving_size), reverse=servingSort)
     return render_template('index.html', recipe_list=recipe_list)
 
+@app.route('/export')
+def export():
+    root = Tk()
+    root.attributes('-topmost', True)
+    root.withdraw()
 
+    file_name = filedialog.asksaveasfilename(title="Save recipes", defaultextension=".json")
 
+    if file_name:
+        file = open(file_name, "w")
+        json.dump(rm.exportRecipesGUI(), file, indent=4)
+        file.close()
 
+    root.destroy()
+
+    return render_template('index.html', recipe_list=rm.RecipeList())
 
 if __name__ == '__main__':
     app.run()
