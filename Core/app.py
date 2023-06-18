@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, flash
 from Core.recipeProject import RecipeManager
 import logging
 
@@ -30,7 +30,7 @@ def sortID():
 def view_id(id):
     recipe = rm.viewSpecificRecipe(int(id))
     # print(rm.data)
-    return render_template('viewID.html',recipe = recipe)
+    return render_template('viewID.html', recipe = recipe)
 
 @app.route('/add')
 def add():
@@ -43,7 +43,13 @@ def edit_id(id):
 
 @app.route('/delete/<id>')
 def delete_id(id):
-    pass
+    recipe_name = rm.viewSpecificRecipe(int(id)).recipe_name
+    return render_template('index.html', recipe_list=rm.RecipeList(), recipe_name=recipe_name, recipe_id=id)
+
+@app.route('/deleteConfirm/<id>')
+def deleteConfirm_id(id):
+    rm.deleteRecipe(int(id))
+    return render_template('index.html', recipe_list=rm.RecipeList())
 
 @app.route('/sortRecipeName')
 def sortRecipeName():
