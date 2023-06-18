@@ -1,47 +1,47 @@
 * {
-  margin: 0;
+    margin: 0;
 }
 
 table {
-  width: 100%;
-  border-collapse: collapse;
+    width: 100%;
+    border-collapse: collapse;
 }
 
 th,
 td {
-  padding: 8px;
-  text-align: left;
-  border-bottom: 1px solid;
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid;
 }
 
 body {
-  background-color: skyblue;
+    background-color: skyblue;
 }
 
 div#deletePrompt {
-  width: 100vw;
-  height: 100vh;
-  position: absolute;
-  background-color: #000000aa;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    background-color: #000000aa;
 }
 
 div#deletePrompt div#deleteBox {
-  width: 400px;
-  height: 175px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #ffffff;
-  margin: auto;
+    width: 400px;
+    height: 175px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    margin: auto;
 }
 
 div#deletePrompt div#deleteBox p {
-  margin-top: 30px;
-  font-size: x-large;
-  text-align: center;
+    margin-top: 30px;
+    font-size: x-large;
+    text-align: center;
 }
 
 div#deletePrompt div#deleteBox p a {
-  margin: 30px;
+    margin: 30px;
 }

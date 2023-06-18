@@ -13,6 +13,16 @@
 </head>
 
 <body>
+    <!-- {% if exitBool %}
+    <div id="exitPrompt">
+        <div id="exitBox">
+            <h3>Important Notice: Exiting the GUI will not cause of loss of data from Recipe Manager. Data can still be saved from the command shell after exiting GUI. Click Export on homepage to save data from the GUI.</h3>
+            <p>Enter the following command in the shell to exit GUI: gui deactivate<br/><br/>
+                <a href="/">Close</a>
+        </div>
+    </div>
+    {% endif %} -->
+
     {% if recipe_name %}
     <div id="deletePrompt">
         <div id="deleteBox">
@@ -89,6 +99,7 @@
         <button onclick="location.href = '/export';" style="margin: 0 10px;height: 30px;width: 70px;">Export</button>
 
         <button style="margin: 0 10px;height: 30px;width: 70px;">Import</button>
+        <button onclick="location.href = '/exit';" style="margin: 0 10px;height: 30px;width: 70px;">Exit GUI</button>
     </div>
 </body>
 
