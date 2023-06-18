@@ -228,8 +228,7 @@ class RecipeManager:
         folder_path = 'Core/imports'
 
         if not os.path.exists(folder_path):
-            print("Imports folder has not been initialized in Core/.")
-            return "Import404"
+            os.makedirs("Core/imports/")
 
         file_path = folder_path + '/' + str(filename) + '.json'
 

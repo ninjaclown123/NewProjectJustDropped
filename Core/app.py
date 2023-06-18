@@ -79,6 +79,12 @@ def sortRecipeServingSize():
     recipe_list = sorted(rm.RecipeList(), key = lambda x: (x.serving_size), reverse=servingSort)
     return render_template('index.html', recipe_list=recipe_list)
 
+@app.route('/exit')
+def exitGUI():
+    pass
+    
+
+
 
 
 
