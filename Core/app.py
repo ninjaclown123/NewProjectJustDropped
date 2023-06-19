@@ -4,7 +4,7 @@ import json
 from flask import Flask, render_template, redirect, url_for, flash, request
 
 
-from Core.recipeProject import RecipeManager
+from Core.recipeProject import RecipeManager, Recipe
 import logging, json
 from tkinter import Tk, filedialog
 
@@ -38,9 +38,34 @@ def view_id(id):
     # print(rm.data)
     return render_template('viewID.html', recipe = recipe)
 
-@app.route('/add')
+@app.route('/add', methods=['GET'])
 def add():
-    return render_template('add.html',recipe = {'Recipe Name':None, 'Recipe Author':None, 'Preparation time':None,'Cook time':None,'Serving Size':None,'Ingredients':[], 'Instructions':{}})
+    return render_template('add.html',recipe = Recipe(
+            0,
+            "McBurger",
+            "Sam",
+            10,
+            12,
+            1,
+            [
+                {"ingredientName": "bun", "quantity": 1, "measurement": "unit"},
+                {"ingredientName": "secretPatty",
+                    "quantity": 1, "measurement": "unit"},
+                {"ingredientName": "specialMayo",
+                    "quantity": 10, "measurement": "grams"},
+                {"ingredientName": "specialSauce",
+                    "quantity": 20, "measurement": "grams"},
+                {"ingredientName": "lettuce", "quantity": 8, "measurement": "grams"},
+                {"ingredientName": "tomato", "quantity": 8, "measurement": "grams"}
+            ],
+            {
+                "1": "Assemble the bun and the secret patty.",
+                "2": "Spread special mayo and special sauce on the bun.",
+                "3": "Add lettuce and tomato on top.",
+                "4": "Cook the assembled burger for 12 minutes."
+            }
+        )
+        )
 
 
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
@@ -151,23 +176,23 @@ def sortRecipeServingSize():
 def exitGUI():
     pass
     
-@app.route('/export')
-def export():
-    root = Tk()
-    root.attributes('-topmost', True)
-    root.withdraw()
+# @app.route('/export')
+# def export():
+#     root = Tk()
+#     root.attributes('-topmost', True)
+#     root.withdraw()
 
 
-    file_name = filedialog.asksaveasfilename(title="Save recipes", defaultextension=".json")
+#     file_name = filedialog.asksaveasfilename(title="Save recipes", defaultextension=".json")
 
-    if file_name:
-        file = open(file_name, "w")
-        json.dump(rm.exportRecipesGUI(), file, indent=4)
-        file.close()
+#     if file_name:
+#         file = open(file_name, "w")
+#         json.dump(rm.exportRecipesGUI(), file, indent=4)
+#         file.close()
 
-    root.destroy()
+#     root.destroy()
 
-    return render_template('index.html', recipe_list=rm.RecipeList())
+#     return render_template('index.html', recipe_list=rm.RecipeList())
 
 if __name__ == '__main__':
     app.run()
