@@ -1,6 +1,7 @@
 import json
 import os
 from json.decoder import JSONDecodeError
+from pathlib import Path
 
 
 class Recipe:
@@ -273,6 +274,30 @@ class RecipeManager:
             self.data = importData
 
             print('Imported ' + str(filename) + '.json from ' +
+                  str(file_path) + ' successfully.')
+            file.close()
+            return True
+
+        except JSONDecodeError:
+            raise ValueError(
+                f'The selected JSON file "{filename}.json" is corrupted.')
+        
+
+    def importRecipesGUI(self, file_path): # josh
+        file = open(file_path, 'r')
+        path = Path(file_path)
+        filename = path.name
+
+        try:
+            fileData = json.load(file)
+            importData = []
+            for i in fileData:
+                recipe = Recipe(i["id"],i["recipeName"],i["recipeAuthor"],i["prepTime"],i["cookTime"],i["servingSize"],i["ingredients"],i["instructions"])
+                importData.append(recipe)
+            
+            self.data = importData
+
+            print('Imported ' + str(filename) + ' from ' +
                   str(file_path) + ' successfully.')
             file.close()
             return True

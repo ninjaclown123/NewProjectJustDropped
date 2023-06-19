@@ -29,7 +29,6 @@ def sortID():
     global idSort
     idSort = not idSort
     recipe_list = sorted(rm.RecipeList(), key = lambda x: x.id, reverse = idSort)
-
     return render_template('index.html', recipe_list=recipe_list)
 
 @app.route('/view/<id>')
@@ -44,16 +43,16 @@ def add():
         # Retrieve the form data
         recipe_name = request.form.get('recipe_name')
         recipe_author = request.form.get('recipe_author')
-        prep_time = request.form.get('prep_time')
-        cook_time = request.form.get('cook_time')
-        serving_size = request.form.get('serving_size')
+        prep_time = int(request.form.get('prep_time'))
+        cook_time = int(request.form.get('cook_time'))
+        serving_size = int(request.form.get('serving_size'))
 
         # Retrieve ingredients and instructions
         num_ingredients = int(request.form.get('num_ingredients'))
         ingredients = []
         for i in range(num_ingredients):
             ingredient_name = request.form.get(f'ingredient_name_{i}')
-            ingredient_quantity = request.form.get(f'ingredient_quantity_{i}')
+            ingredient_quantity = int(request.form.get(f'ingredient_quantity_{i}'))
             ingredient_measurement = request.form.get(f'ingredient_measurement_{i}')
             print(f'Ingredient {i+1}: Name={ingredient_name}, Quantity={ingredient_quantity}, Measurement={ingredient_measurement}')
             ingredient = {
@@ -208,7 +207,6 @@ def export():
     root.attributes('-topmost', True)
     root.withdraw()
 
-
     file_name = filedialog.asksaveasfilename(title="Save recipes", defaultextension=".json")
 
     if file_name:
@@ -217,7 +215,20 @@ def export():
         file.close()
 
     root.destroy()
+    return render_template('index.html', recipe_list=rm.RecipeList())
 
+@app.route('/import')
+def import_file():
+    root = Tk()
+    root.attributes('-topmost', True)
+    root.withdraw()
+
+    my_file = filedialog.askopenfilename(title="Import recipes", filetypes=[("JSON Files", "*.json")])
+
+    if my_file:
+        rm.importRecipesGUI(my_file)
+
+    root.destroy()
     return render_template('index.html', recipe_list=rm.RecipeList())
 
 if __name__ == '__main__':
