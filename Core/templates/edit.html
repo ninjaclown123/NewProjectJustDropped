@@ -1,1 +1,77 @@
-hello world {{id}}
+<!-- editID.html -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Edit Recipe</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        /* Add your custom CSS styles here */
+    </style>
+</head>
+
+<body>
+  <h1>Edit Recipe: {{ recipe.recipe_name }}</h1>
+<!-- Rest of the edit form -->
+
+
+    <form method="POST" action="{{ url_for('edit_id', id=recipe.id) }}">
+        <label for="recipe_name">Recipe Name:</label>
+        <input type="text" id="recipe_name" name="recipe_name" value="{{ recipe.recipe_name }}"><br><br>
+
+        <label for="recipe_author">Author:</label>
+        <input type="text" id="recipe_author" name="recipe_author" value="{{ recipe.recipe_author }}"><br><br>
+
+        <label for="prep_time">Preparation Time (minutes):</label>
+        <input type="number" id="prep_time" name="prep_time" value="{{ recipe.prep_time }}"><br><br>
+
+        <label for="cook_time">Cook Time (minutes):</label>
+        <input type="number" id="cook_time" name="cook_time" value="{{ recipe.cook_time }}"><br><br>
+
+        <label for="serving_size">Serving Size:</label>
+        <input type="text" id="serving_size" name="serving_size" value="{{ recipe.serving_size }}"><br><br>
+
+        <label>Ingredients:</label>
+        <br>
+        {% for i in range(recipe.ingredients|length) %}
+        {% set ingredient = recipe.ingredients[i] %}
+        <br>
+        <label for="ingredient_name_{{ loop.index0 }}">Ingredient Name:</label>
+        <input type="text" id="ingredient_name_{{ loop.index0 }}" name="ingredient_name_{{ loop.index0 }}" value="{{ ingredient.ingredientName }}"><br>
+        <br>
+        <label for="ingredient_quantity_{{ loop.index0 }}">Quantity:</label>
+        <input type="text" id="ingredient_quantity_{{ loop.index0 }}" name="ingredient_quantity_{{ loop.index0 }}" value="{{ ingredient.quantity }}"><br>
+        <br>
+        <label for="ingredient_measurement_{{ loop.index0 }}">Measurement:</label>
+        <input type="text" id="ingredient_measurement_{{ loop.index0 }}" name="ingredient_measurement_{{ loop.index0 }}" value="{{ ingredient.measurement }}"><br>
+        <br>
+        {% endfor %}
+
+        <label>Instructions:</label>
+        <br>
+        {% set sorted_instructions = recipe.instructions|dictsort %}
+        {% for i in range(sorted_instructions|length) %}
+            {% set step = sorted_instructions[i][0] %}
+            {% set instruction = sorted_instructions[i][1] %}
+
+            <label for="instruction_{{ loop.index0 }}">Instruction:</label>
+            <input type="text" id="instruction_{{ loop.index0 }}" name="instruction_{{ loop.index0 }}" value="{{ instruction }}"><br>
+        {% endfor %}
+
+
+
+
+
+        <input type="submit" value="Save">
+    </form>
+
+    <h1>
+        <a href="/">
+            Home
+        </a>
+    </h1>
+</body>
+
+</html>
