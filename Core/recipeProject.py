@@ -221,6 +221,27 @@ class RecipeManager:
               str(filepath) + ' Successfully.')
 
         return True
+    
+    def exportRecipesGUI(self):  # josh
+        # converts recipes to a .json file
+
+        mrJSON = []
+
+        for i in self.data:
+            mrJSON.append(
+                {
+                    "id": i.id,
+                    "recipeName": i.recipe_name,
+                    "recipeAuthor": i.recipe_author,
+                    "prepTime": i.prep_time,
+                    "cookTime": i.cook_time,
+                    "servingSize": i.serving_size,
+                    "ingredients": i.ingredients,
+                    "instructions": i.instructions
+                }
+            )
+        
+        return mrJSON
 
     def importRecipes(self, filename):  # sam
         # imports recipes from a .json file
@@ -228,8 +249,7 @@ class RecipeManager:
         folder_path = 'Core/imports'
 
         if not os.path.exists(folder_path):
-            print("Imports folder has not been initialized in Core/.")
-            return "Import404"
+            os.makedirs("Core/imports/")
 
         file_path = folder_path + '/' + str(filename) + '.json'
 

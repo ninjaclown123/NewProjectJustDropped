@@ -1,8 +1,12 @@
+
 import json
 
 from flask import Flask, render_template, redirect, url_for, flash, request
+
+
 from Core.recipeProject import RecipeManager
-import logging
+import logging, json
+from tkinter import Tk, filedialog
 
 app = Flask(__name__)
 
@@ -32,7 +36,7 @@ def sortID():
 def view_id(id):
     recipe = rm.viewSpecificRecipe(int(id))
     # print(rm.data)
-    return render_template('viewID.html',recipe = recipe)
+    return render_template('viewID.html', recipe = recipe)
 
 @app.route('/add')
 def add():
@@ -106,7 +110,13 @@ def edit_id(id):
 
 @app.route('/delete/<id>')
 def delete_id(id):
-    pass
+    recipe_name = rm.viewSpecificRecipe(int(id)).recipe_name
+    return render_template('index.html', recipe_list=rm.RecipeList(), recipe_name=recipe_name, recipe_id=id)
+
+@app.route('/deleteConfirm/<id>')
+def deleteConfirm_id(id):
+    rm.deleteRecipe(int(id))
+    return render_template('index.html', recipe_list=rm.RecipeList())
 
 @app.route('/sortRecipeName')
 def sortRecipeName():
@@ -137,8 +147,27 @@ def sortRecipeServingSize():
     return render_template('index.html', recipe_list=recipe_list)
 
 
+@app.route('/exit')
+def exitGUI():
+    pass
+    
+@app.route('/export')
+def export():
+    root = Tk()
+    root.attributes('-topmost', True)
+    root.withdraw()
 
 
+    file_name = filedialog.asksaveasfilename(title="Save recipes", defaultextension=".json")
+
+    if file_name:
+        file = open(file_name, "w")
+        json.dump(rm.exportRecipesGUI(), file, indent=4)
+        file.close()
+
+    root.destroy()
+
+    return render_template('index.html', recipe_list=rm.RecipeList())
 
 if __name__ == '__main__':
     app.run()

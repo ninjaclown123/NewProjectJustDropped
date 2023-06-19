@@ -1,11 +1,14 @@
 import copy
 import os
-import subprocess
 import threading
 import sys
 from typing import IO
 from app import app
 from werkzeug.serving import make_server
+
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchWindowException
 
 
 # Get the absolute path of the directory containing this script
@@ -96,7 +99,7 @@ class RmMode(cmd.Cmd):
         self.gui_status = False
         self.server_thread = None
         self.server = None
-
+        self.selenium_fail = False
 
     def do_view(self,arg):
         'Type in "view all" to view all the recipes OR type "view <id>" to view specific id! \nPrint a sorted list of recipes by recipe_name or recipe_author: \nview sort recipe_name \n view sort recipe_author'
@@ -106,11 +109,11 @@ class RmMode(cmd.Cmd):
             args = arg.split()
             if args[0] == 'sort':
                 if len(args) < 2:
-                    print('Sort argument not supplied! Consult manual: help view')
+                    print('\t>>>Sort argument not supplied! Consult manual: help view')
                     return
                 
                 if args[1] not in ['recipe_name' , 'recipe_author']:
-                    print('Sort argument not supplied! Consult manual: help view')
+                    print('\t>>>Sort argument not supplied! Consult manual: help view')
                     return
                 
                 if args[1] == 'recipe_name':
@@ -118,7 +121,7 @@ class RmMode(cmd.Cmd):
                     my_sorted = sorted(my_recipes, key=lambda x: x.recipe_name)
 
                     rm.data = my_sorted
-                    print('Sorted by recipe name.\n')
+                    print('\t>>>Sorted by recipe name.\n')
                     rm.viewRecipeList()
 
                     # unsort the data.
@@ -130,7 +133,7 @@ class RmMode(cmd.Cmd):
 
                     # temporarily sort the data, then print it.
                     rm.data = my_sorted
-                    print('Sorted by recipe author.\n')
+                    print('\t>>>Sorted by recipe author.\n')
                     rm.viewRecipeList()
 
                     # unsort the data.
@@ -158,6 +161,10 @@ class RmMode(cmd.Cmd):
 
     def do_add(self,arg):
         '\nAdds a recipe to recipes list. \n\tCommand: add'
+
+        if self.gui_status:
+            print('\t>>>Add command unavailable while GUI is active.')
+            return
 
         if arg:
             print('Add command does not take any arguments.')
@@ -314,6 +321,11 @@ class RmMode(cmd.Cmd):
 
     def do_edit(self, arg):
         'Edit a recipe in Recipe Manager. Command: edit <id>'
+
+        if self.gui_status:
+            print('\t>>>Edit command unavailable while GUI is active.')
+            return 
+
         if arg:
             if arg.isnumeric():
                 recipe_id = int(arg)
@@ -431,6 +443,11 @@ class RmMode(cmd.Cmd):
 
     def do_delete(self,arg):
         '\nWipes a recipe from the memory.\n\tCommand: delete <id>.\n'
+
+        if self.gui_status:
+            print('\t>>>Delete command unavailable while GUI is active.')
+            return
+
         if arg:
             if arg.isnumeric():
                 rm.deleteRecipe(int(arg))
@@ -464,6 +481,10 @@ class RmMode(cmd.Cmd):
 
     def do_clear(self,arg):
         '\nClears Recipe Manager\'s memory. \n\t Command: clear  \n Optional Argument: --f forces the clear without y/n \n'
+
+        if self.gui_status:
+            print('>>>\tClear command unavailable while GUI is active.')
+
         if arg == '--f':
             rm.data = []
             print('Recipe Manager memory cleared successfully.')
@@ -477,11 +498,22 @@ class RmMode(cmd.Cmd):
             else:
                 print('\tClear memory operation cancelled')
 
+
     def do_gui(self, arg):
         if arg == 'activate':
             if not self.gui_status:
                 self.start_server()
                 self.gui_status = True
+                
+                try:
+                    self.chrome = webdriver.Chrome()
+                    self.chrome.get('http://127.0.0.1:5000')
+                except Exception as e:
+                    self.selenium_fail = True
+                    print(f"Selenium failed. Copy-paste this to your browser's URL or Ctrl + click this to open the GUI: 127.0.0.1:5000\n")
+                
+
+
                 print('GUI activated successfully.')
                 return
             else:
@@ -489,21 +521,44 @@ class RmMode(cmd.Cmd):
 
         elif arg == 'deactivate':
             if self.gui_status:
+                user_prompt = input('\t>>> Are you sure you want to close the GUI? (y/n): ')
+                if user_prompt not in ['y','n']:
+                    while user_prompt not in ['y','n']:
+                        user_prompt = input('\t>>> Are you sure you want to close the GUI? (y/n): ')
+
+                if user_prompt == 'n':
+                    return
+
                 self.server.shutdown()
                 self.server_thread.join()
                 self.server_thread = None
                 self.gui_status = False
-                print('GUI deactivated successfully.')
+
+                try:
+
+                    if self.selenium_fail == False:
+                        self.chrome.close()
+                        # self.chrome.find_element(By.XPATH,"//div[@class='recipe-list']/ul/li/a[@href='/view/0']")
+                    
+                except NoSuchWindowException:
+                    print("\t>>> GUI was closed.")
+                except Exception as e:
+                    print("\t>>> GUI was closed.")
+
+
+                    
+
+                print('\t>>> GUI deactivated successfully.')
                 return
             else:
-                print('GUI is inactive.')
+                print('\t>>> GUI is inactive.')
                 return
         else:
-            print('Invalid argument provided. Consult manual: help gui')
+            print('\t>>> Invalid argument provided. Consult manual: help gui')
 
     def start_server(self):
         if self.gui_status:
-            print('GUI is active.')
+            print('\t>>> GUI is active.')
             return
         else:
             # server = make_server('127.0.0.1', 5000, app)
@@ -513,22 +568,18 @@ class RmMode(cmd.Cmd):
             self.server_thread = threading.Thread(target=self.server.serve_forever)
             self.server_thread.start()
 
-
-        
-
-    def run_flask_app(self):
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-        python_path = os.path.join(base_dir, 'venv', 'Scripts', 'python.exe')
-        script_path = os.path.join(base_dir, 'app.py')
-        subprocess.run([python_path, script_path])
-
-
-
     def do_exit(self,arg):
         'Exits RmMode shell. \n\tCommand: exit\n'
-        print('Thank you for using Recipe Manager!')
+        if self.gui_status:
+            print('\t>>> GUI is still active. Exit GUI command: gui deactivate')
+            return
+
+        print('\t>>> Thank you for using Recipe Manager!')
 
         return True
+
+
+
 
 
 if __name__ == '__main__':
