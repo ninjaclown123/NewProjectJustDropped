@@ -201,7 +201,7 @@ def sortRecipeServingSize():
 @app.route('/exit')
 def exitGUI():
     pass
-    
+
 @app.route('/export')
 def export():
     root = Tk()
