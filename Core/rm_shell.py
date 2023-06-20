@@ -581,6 +581,15 @@ class RmMode(cmd.Cmd):
             print('\t>>> GUI is still active. Exit GUI command: gui deactivate')
             return
 
+        user_input = input('\t>>> Are you sure you want to exit? All unsaved data will be lost. Use export <filename> command to save. (y/n): ')
+        if user_input not in ['y','n']:
+            while user_input not in ['y','n']:
+                user_input = input('\t>>> Choose y/n: ')
+        
+        if user_input == 'n':
+            print('\t>>> Exit Cancelled')
+            return
+
         print('\t>>> Thank you for using Recipe Manager!')
 
         return True
@@ -588,7 +597,7 @@ class RmMode(cmd.Cmd):
 
 app = Flask(__name__)
 
-# logging.basicConfig(filename='gui_logs.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(filename='gui_logs.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # rm = RecipeManager()
 nameSort = True
@@ -782,7 +791,8 @@ def sortRecipeServingSize():
 
 @app.route('/exit')
 def exitGUI():
-    pass
+    
+    return render_template('index.html',exitBool = True)
     
 @app.route('/export')
 def export():
