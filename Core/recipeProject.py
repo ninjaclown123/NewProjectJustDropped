@@ -1,6 +1,7 @@
 import json
 import os
 from json.decoder import JSONDecodeError
+from pathlib import Path
 
 
 class Recipe:
@@ -155,6 +156,8 @@ class RecipeManager:
             if r.recipe_name == recipe.recipe_name:
                 raise Exception("Recipe with the same name already exists!")
         self.data.append(recipe)
+        print(self.data)
+
 
     def editRecipe(self, newRecipe):
         for recipe in self.data:
@@ -170,12 +173,13 @@ class RecipeManager:
 
         raise ValueError("Recipe ID not found in the list of recipes.")
 
-    def viewSpecificRecipe(self, id):
+    def viewSpecificRecipe(self, ids):
         for recipe in self.data:
-            if recipe.id == id:
+            if recipe.id == ids:
                 return recipe
 
-        raise ValueError(f"Recipe with ID {id} not found.")
+        raise ValueError(f"Recipe with ID {ids} not found.")
+    
 
 
     def deleteRecipe(self, id):  # josh
@@ -270,6 +274,30 @@ class RecipeManager:
             self.data = importData
 
             print('Imported ' + str(filename) + '.json from ' +
+                  str(file_path) + ' successfully.')
+            file.close()
+            return True
+
+        except JSONDecodeError:
+            raise ValueError(
+                f'The selected JSON file "{filename}.json" is corrupted.')
+        
+
+    def importRecipesGUI(self, file_path): # josh
+        file = open(file_path, 'r')
+        path = Path(file_path)
+        filename = path.name
+
+        try:
+            fileData = json.load(file)
+            importData = []
+            for i in fileData:
+                recipe = Recipe(i["id"],i["recipeName"],i["recipeAuthor"],i["prepTime"],i["cookTime"],i["servingSize"],i["ingredients"],i["instructions"])
+                importData.append(recipe)
+            
+            self.data = importData
+
+            print('Imported ' + str(filename) + ' from ' +
                   str(file_path) + ' successfully.')
             file.close()
             return True

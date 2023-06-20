@@ -4,7 +4,11 @@ import json
 from flask import Flask, render_template, redirect, url_for, flash, request
 
 
+<<<<<<< HEAD
 from recipeProject import RecipeManager, Recipe
+=======
+from Core.recipeProject import RecipeManager,Recipe
+>>>>>>> main
 import logging, json
 from tkinter import Tk, filedialog
 
@@ -29,7 +33,6 @@ def sortID():
     global idSort
     idSort = not idSort
     recipe_list = sorted(rm.RecipeList(), key = lambda x: x.id, reverse = idSort)
-
     return render_template('index.html', recipe_list=recipe_list)
 
 @app.route('/view/<id>')
@@ -38,6 +41,7 @@ def view_id(id):
     # print(rm.data)
     return render_template('viewID.html', recipe = recipe)
 
+<<<<<<< HEAD
 @app.route('/add', methods=['GET'])
 def add():
     temp = []
@@ -96,6 +100,62 @@ def save_recipe():
         return redirect(url_for('home'))
     
     return redirect(url_for('home'))
+=======
+@app.route('/add', methods=['GET', 'POST'])
+def add():
+    if request.method == 'POST':
+        # Retrieve the form data
+        recipe_name = request.form.get('recipe_name')
+        recipe_author = request.form.get('recipe_author')
+        prep_time = int(request.form.get('prep_time'))
+        cook_time = int(request.form.get('cook_time'))
+        serving_size = int(request.form.get('serving_size'))
+
+        # Retrieve ingredients and instructions
+        num_ingredients = int(request.form.get('num_ingredients'))
+        ingredients = []
+        for i in range(num_ingredients):
+            ingredient_name = request.form.get(f'ingredient_name_{i}')
+            ingredient_quantity = int(request.form.get(f'ingredient_quantity_{i}'))
+            ingredient_measurement = request.form.get(f'ingredient_measurement_{i}')
+            print(f'Ingredient {i+1}: Name={ingredient_name}, Quantity={ingredient_quantity}, Measurement={ingredient_measurement}')
+            ingredient = {
+                'ingredientName': ingredient_name,
+                'quantity': ingredient_quantity,
+                'measurement': ingredient_measurement
+            }
+            ingredients.append(ingredient)
+
+        num_steps = int(request.form.get('num_steps'))
+        instructions = {}
+        for i in range(num_steps):
+            instruction = request.form.get(f'instruction_{i}')
+            step_number = i + 1
+            instructions[step_number] = instruction
+
+        last_id = rm.RecipeList()[-1].id if rm.RecipeList() else 0
+        recipe_id = last_id + 1
+
+        # Create a new recipe
+        temp = Recipe(  
+            recipe_id,
+            recipe_name,
+            recipe_author,
+            prep_time,
+            cook_time,
+            serving_size,
+            ingredients,
+            instructions,    
+        )
+        rm.addRecipe(temp)
+
+        # Redirect to the home page or the newly added recipe's view page
+        return redirect(url_for('home'))
+    
+    # If it's a GET request, render the add.html template
+    return render_template('add.html')
+   # return render_template('add.html',recipe = {'Recipe Name':None, 'Recipe Author':None, 'Preparation time':None,'Cook time':None,'Serving Size':None,'Ingredients':[], 'Instructions':{}})
+>>>>>>> main
 
 
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
@@ -205,13 +265,12 @@ def sortRecipeServingSize():
 @app.route('/exit')
 def exitGUI():
     pass
-    
+
 @app.route('/export')
 def export():
     root = Tk()
     root.attributes('-topmost', True)
     root.withdraw()
-
 
     file_name = filedialog.asksaveasfilename(title="Save recipes", defaultextension=".json")
 
@@ -221,7 +280,20 @@ def export():
         file.close()
 
     root.destroy()
+    return render_template('index.html', recipe_list=rm.RecipeList())
 
+@app.route('/import')
+def import_file():
+    root = Tk()
+    root.attributes('-topmost', True)
+    root.withdraw()
+
+    my_file = filedialog.askopenfilename(title="Import recipes", filetypes=[("JSON Files", "*.json")])
+
+    if my_file:
+        rm.importRecipesGUI(my_file)
+
+    root.destroy()
     return render_template('index.html', recipe_list=rm.RecipeList())
 
 if __name__ == '__main__':
