@@ -206,23 +206,23 @@ def sortRecipeServingSize():
 def exitGUI():
     pass
     
-# @app.route('/export')
-# def export():
-#     root = Tk()
-#     root.attributes('-topmost', True)
-#     root.withdraw()
+@app.route('/export')
+def export():
+    root = Tk()
+    root.attributes('-topmost', True)
+    root.withdraw()
 
 
-#     file_name = filedialog.asksaveasfilename(title="Save recipes", defaultextension=".json")
+    file_name = filedialog.asksaveasfilename(title="Save recipes", defaultextension=".json")
 
-#     if file_name:
-#         file = open(file_name, "w")
-#         json.dump(rm.exportRecipesGUI(), file, indent=4)
-#         file.close()
+    if file_name:
+        file = open(file_name, "w")
+        json.dump(rm.exportRecipesGUI(), file, indent=4)
+        file.close()
 
-#     root.destroy()
+    root.destroy()
 
-#     return render_template('index.html', recipe_list=rm.RecipeList())
+    return render_template('index.html', recipe_list=rm.RecipeList())
 
 if __name__ == '__main__':
     app.run()
