@@ -156,7 +156,7 @@ class RecipeManager:
             if r.recipe_name == recipe.recipe_name:
                 raise Exception("Recipe with the same name already exists!")
         self.data.append(recipe)
-        print(self.data)
+        
 
 
     def editRecipe(self, newRecipe):
