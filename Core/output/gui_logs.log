@@ -1,0 +1,76 @@
+2023-06-20 06:06:06,636 - ERROR - Exception on / [GET]
+Traceback (most recent call last):
+  File "flask\app.py", line 2190, in wsgi_app
+  File "flask\app.py", line 1486, in full_dispatch_request
+  File "flask\app.py", line 1484, in full_dispatch_request
+  File "flask\app.py", line 1469, in dispatch_request
+  File "Core\rm_shell.py", line 612, in home
+  File "flask\templating.py", line 150, in render_template
+  File "jinja2\environment.py", line 1081, in get_or_select_template
+  File "jinja2\environment.py", line 1010, in get_template
+  File "jinja2\environment.py", line 969, in _load_template
+  File "jinja2\loaders.py", line 126, in load
+  File "flask\templating.py", line 64, in get_source
+  File "flask\templating.py", line 98, in _get_source_fast
+jinja2.exceptions.TemplateNotFound: index.html
+2023-06-20 06:06:06,638 - INFO - 127.0.0.1 - - [20/Jun/2023 06:06:06] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2023-06-20 06:06:06,669 - INFO - 127.0.0.1 - - [20/Jun/2023 06:06:06] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2023-06-20 06:06:42,934 - ERROR - Exception on / [GET]
+Traceback (most recent call last):
+  File "flask\app.py", line 2190, in wsgi_app
+  File "flask\app.py", line 1486, in full_dispatch_request
+  File "flask\app.py", line 1484, in full_dispatch_request
+  File "flask\app.py", line 1469, in dispatch_request
+  File "Core\rm_shell.py", line 612, in home
+  File "flask\templating.py", line 150, in render_template
+  File "jinja2\environment.py", line 1081, in get_or_select_template
+  File "jinja2\environment.py", line 1010, in get_template
+  File "jinja2\environment.py", line 969, in _load_template
+  File "jinja2\loaders.py", line 126, in load
+  File "flask\templating.py", line 64, in get_source
+  File "flask\templating.py", line 98, in _get_source_fast
+jinja2.exceptions.TemplateNotFound: index.html
+2023-06-20 06:06:42,935 - INFO - 127.0.0.1 - - [20/Jun/2023 06:06:42] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2023-06-20 06:06:42,974 - INFO - 127.0.0.1 - - [20/Jun/2023 06:06:42] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2023-06-20 06:07:38,449 - ERROR - Exception on / [GET]
+Traceback (most recent call last):
+  File "flask\app.py", line 2190, in wsgi_app
+  File "flask\app.py", line 1486, in full_dispatch_request
+  File "flask\app.py", line 1484, in full_dispatch_request
+  File "flask\app.py", line 1469, in dispatch_request
+  File "Core\rm_shell.py", line 612, in home
+  File "flask\templating.py", line 150, in render_template
+  File "jinja2\environment.py", line 1081, in get_or_select_template
+  File "jinja2\environment.py", line 1010, in get_template
+  File "jinja2\environment.py", line 969, in _load_template
+  File "jinja2\loaders.py", line 126, in load
+  File "flask\templating.py", line 64, in get_source
+  File "flask\templating.py", line 98, in _get_source_fast
+jinja2.exceptions.TemplateNotFound: index.html
+2023-06-20 06:07:38,451 - INFO - 127.0.0.1 - - [20/Jun/2023 06:07:38] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2023-06-20 06:07:38,486 - INFO - 127.0.0.1 - - [20/Jun/2023 06:07:38] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2023-06-20 06:07:52,812 - ERROR - Exception on / [GET]
+Traceback (most recent call last):
+  File "flask\app.py", line 2190, in wsgi_app
+  File "flask\app.py", line 1486, in full_dispatch_request
+  File "flask\app.py", line 1484, in full_dispatch_request
+  File "flask\app.py", line 1469, in dispatch_request
+  File "Core\rm_shell.py", line 612, in home
+  File "flask\templating.py", line 150, in render_template
+  File "jinja2\environment.py", line 1081, in get_or_select_template
+  File "jinja2\environment.py", line 1010, in get_template
+  File "jinja2\environment.py", line 969, in _load_template
+  File "jinja2\loaders.py", line 126, in load
+  File "flask\templating.py", line 64, in get_source
+  File "flask\templating.py", line 98, in _get_source_fast
+jinja2.exceptions.TemplateNotFound: index.html
+2023-06-20 06:07:52,814 - INFO - 127.0.0.1 - - [20/Jun/2023 06:07:52] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2023-06-20 06:07:52,850 - INFO - 127.0.0.1 - - [20/Jun/2023 06:07:52] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2023-06-20 06:10:43,815 - INFO - 127.0.0.1 - - [20/Jun/2023 06:10:43] "GET / HTTP/1.1" 200 -
+2023-06-20 06:10:43,892 - INFO - 127.0.0.1 - - [20/Jun/2023 06:10:43] "GET /static/style.css HTTP/1.1" 200 -
+2023-06-20 06:10:43,927 - INFO - 127.0.0.1 - - [20/Jun/2023 06:10:43] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2023-06-20 06:10:49,567 - INFO - 127.0.0.1 - - [20/Jun/2023 06:10:49] "GET /add HTTP/1.1" 200 -
+2023-06-20 06:10:52,589 - INFO - 127.0.0.1 - - [20/Jun/2023 06:10:52] "GET /exit HTTP/1.1" 200 -
+2023-06-20 06:10:52,594 - INFO - 127.0.0.1 - - [20/Jun/2023 06:10:52] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2023-06-20 06:10:54,217 - INFO - 127.0.0.1 - - [20/Jun/2023 06:10:54] "GET / HTTP/1.1" 200 -
+2023-06-20 06:10:54,223 - INFO - 127.0.0.1 - - [20/Jun/2023 06:10:54] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
