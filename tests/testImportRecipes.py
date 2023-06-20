@@ -127,7 +127,7 @@ class TestRecipeManagement(unittest.TestCase):
 
 
         rm.importRecipes('unittestRecipeImport')
-
+        print(data)
         for i in range(len(data)):
             self.assertEqual(data[i].id,rm.data[i].id)
             self.assertEqual(data[i].recipe_name,rm.data[i].recipe_name)

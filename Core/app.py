@@ -4,7 +4,7 @@ import json
 from flask import Flask, render_template, redirect, url_for, flash, request
 
 
-from Core.recipeProject import RecipeManager,Recipe
+from recipeProject import RecipeManager, Recipe
 import logging, json
 from tkinter import Tk, filedialog
 
@@ -37,60 +37,64 @@ def view_id(id):
     # print(rm.data)
     return render_template('viewID.html', recipe = recipe)
 
-@app.route('/add', methods=['GET', 'POST'])
+@app.route('/add', methods=['GET'])
 def add():
-    if request.method == 'POST':
-        # Retrieve the form data
-        recipe_name = request.form.get('recipe_name')
-        recipe_author = request.form.get('recipe_author')
-        prep_time = int(request.form.get('prep_time'))
-        cook_time = int(request.form.get('cook_time'))
-        serving_size = int(request.form.get('serving_size'))
+    temp = []
+    for i in rm.RecipeList():
+        temp.append(i.recipe_name)
+    return render_template('add.html',recipe = Recipe(
+            0,
+            "McBurger",
+            "Sam",
+            10,
+            12,
+            1,
+            [
+                {"ingredientName": "bun", "quantity": 1, "measurement": "unit"},
+            ],
+            {
+                "1": "Assemble the bun and the secret patty.",
 
-        # Retrieve ingredients and instructions
-        num_ingredients = int(request.form.get('num_ingredients'))
-        ingredients = []
-        for i in range(num_ingredients):
-            ingredient_name = request.form.get(f'ingredient_name_{i}')
-            ingredient_quantity = int(request.form.get(f'ingredient_quantity_{i}'))
-            ingredient_measurement = request.form.get(f'ingredient_measurement_{i}')
-            print(f'Ingredient {i+1}: Name={ingredient_name}, Quantity={ingredient_quantity}, Measurement={ingredient_measurement}')
-            ingredient = {
-                'ingredientName': ingredient_name,
-                'quantity': ingredient_quantity,
-                'measurement': ingredient_measurement
             }
-            ingredients.append(ingredient)
-
-        num_steps = int(request.form.get('num_steps'))
-        instructions = {}
-        for i in range(num_steps):
-            instruction = request.form.get(f'instruction_{i}')
-            step_number = i + 1
-            instructions[step_number] = instruction
-
-        last_id = rm.RecipeList()[-1].id if rm.RecipeList() else 0
-        recipe_id = last_id + 1
-
-        # Create a new recipe
-        temp = Recipe(  
-            recipe_id,
-            recipe_name,
-            recipe_author,
-            prep_time,
-            cook_time,
-            serving_size,
-            ingredients,
-            instructions,    
+        ),recipe_list = temp
         )
-        rm.addRecipe(temp)
 
-        # Redirect to the home page or the newly added recipe's view page
+@app.route('/save_recipe', methods=['POST'])
+def save_recipe():
+    recipe_name = request.form.get('recipe_name')
+    recipe_author = request.form.get('recipe_author')
+    prep_time = int(request.form.get('prep_time'))
+    cook_time = int(request.form.get('cook_time'))
+    serving_size = int(request.form.get('serving_size'))
+    
+    ingredient_names = request.form.getlist('ingredient_name[]')
+    ingredient_quantities = request.form.getlist('ingredient_quantity[]')
+    ingredient_measurements = request.form.getlist('ingredient_measurement[]')
+    
+    ingredients = []
+    for name, quantity, measurement in zip(ingredient_names, ingredient_quantities, ingredient_measurements):
+        ingredient = {
+            'ingredientName': name,
+            'quantity': int(quantity),
+            'measurement': measurement
+        }
+        ingredients.append(ingredient)
+    
+    instruction_texts = request.form.getlist('instruction[]')
+    
+    instructions = {}
+    for i, text in enumerate(instruction_texts, start=1):
+        instructions[str(i)] = text
+    
+    temp = sorted(rm.data, key = lambda x: x.id)
+    # print(temp[-1].id,recipe_name,recipe_author,prep_time,cook_time,serving_size,ingredients,instructions)
+    try:
+        rm.addRecipe(Recipe(temp[-1].id+1,recipe_name,recipe_author,prep_time,cook_time,serving_size,ingredients,instructions))
+    except Exception as e:
+        print(e)
         return redirect(url_for('home'))
     
-    # If it's a GET request, render the add.html template
-    return render_template('add.html')
-   # return render_template('add.html',recipe = {'Recipe Name':None, 'Recipe Author':None, 'Preparation time':None,'Cook time':None,'Serving Size':None,'Ingredients':[], 'Instructions':{}})
+    return redirect(url_for('home'))
 
 
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
@@ -200,7 +204,7 @@ def sortRecipeServingSize():
 @app.route('/exit')
 def exitGUI():
     pass
-    
+
 @app.route('/export')
 def export():
     root = Tk()
