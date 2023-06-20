@@ -791,7 +791,7 @@ def export():
     root.withdraw()
 
 
-    file_name = filedialog.asksaveasfilename(title="Save recipes", defaultextension=".json",filetypes=("JSON Files", "*.json"))
+    file_name = filedialog.asksaveasfilename(title="Save recipes", defaultextension=".json",filetypes=[("JSON Files", "*.json")], initialfile='myJSON')
 
     if file_name:
         file = open(file_name, "w")
@@ -802,6 +802,19 @@ def export():
 
     return redirect(url_for('home'))
 
+@app.route('/import')
+def import_file():
+    root = Tk()
+    root.attributes('-topmost', True)
+    root.withdraw()
+
+    my_file = filedialog.askopenfilename(title="Import recipes", filetypes=[("JSON Files", "*.json")])
+
+    if my_file:
+        rm.importRecipesGUI(my_file)
+
+    root.destroy()
+    return redirect(url_for('home'))
 
 
 
