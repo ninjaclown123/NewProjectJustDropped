@@ -207,10 +207,10 @@ class RecipeManager:
             )
 
         
-        if not os.path.exists("Core/exports/"):
-            os.makedirs("Core/exports/")
+        if not os.path.exists("JSONFiles/"):
+            os.makedirs("JSONFiles/")
 
-        filepath = "Core/exports/" + str(filename) + ".json"
+        filepath = "JSONFiles/" + str(filename) + ".json"
         file = open(filepath, "w")
 
         json.dump(mrJSON, file, indent=4)
@@ -246,10 +246,10 @@ class RecipeManager:
     def importRecipes(self, filename):  # sam
         # imports recipes from a .json file
 
-        folder_path = 'Core/imports'
+        folder_path = 'JSONFiles/'
 
         if not os.path.exists(folder_path):
-            os.makedirs("Core/imports/")
+            os.makedirs("JSONFiles/")
 
         file_path = folder_path + '/' + str(filename) + '.json'
 

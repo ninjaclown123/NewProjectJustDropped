@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Add Recipe</title>
     <script>
+
+
         function addIngredient() {
             var table = document.getElementById("ingredientsTable");
             var row = table.insertRow();
@@ -16,11 +19,145 @@
 
         function deleteIngredient(button) {
             var row = button.parentNode.parentNode;
-            row.parentNode.removeChild(row);
+            var rowCount = row.parentNode.rows.length;
+
+            if (rowCount > 2) {  // Check if there are more than one ingredient rows
+                row.parentNode.removeChild(row);
+            } else {
+                alert("At least one ingredient is required.");
+            }
+        }
+
+        function deleteInstruction(step) {
+            var instructionDiv = document.getElementById("instruction" + step);
+            var instructionsDiv = document.getElementById("instructions");
+
+            if (instructionsDiv.childElementCount === 1) {
+                alert("Atleast one instruction is required.");
+                return;
+            }
+            instructionDiv.parentNode.removeChild(instructionDiv);
+        }
+
+        function addInstruction() {
+            var instructionsDiv = document.getElementById("instructions");
+            var step = instructionsDiv.childElementCount + 1;
+
+            var instructionDiv = document.createElement("div");
+            instructionDiv.setAttribute("id", "instruction" + step);
+
+            var label = document.createElement("label");
+            label.setAttribute("for", "step" + step);
+            label.innerHTML = "Step " + step + ":";
+
+            var textarea = document.createElement("textarea");
+            textarea.setAttribute("id", "step" + step);
+            textarea.setAttribute("name", "instruction[]");
+            textarea.setAttribute("rows", "4");
+            textarea.setAttribute("cols", "50");
+            textarea.setAttribute("required", "true");
+
+            var deleteButton = document.createElement("button");
+            deleteButton.innerHTML = "Delete";
+            deleteButton.onclick = function () { deleteInstruction(step); };
+
+            instructionDiv.appendChild(label);
+            instructionDiv.appendChild(textarea);
+            instructionDiv.appendChild(deleteButton);
+
+            instructionsDiv.appendChild(instructionDiv);
         }
     </script>
+    <style>
+        body {
+            background-color: skyblue;
+        }
+    </style>
+
 </head>
+
 <body>
+    <h1>Add Recipe</h1>
+
+    <form action="/save_recipe" method="POST">
+        <label for="recipe_name">Recipe Name:</label>
+        <input type="text" id="recipe_name" name="recipe_name" required><br><br>
+
+        <label for="recipe_author">Recipe Author:</label>
+        <input type="text" id="recipe_author" name="recipe_author" required><br><br>
+
+        <label for="prep_time">Preparation Time (minutes):</label>
+        <input type="number" id="prep_time" name="prep_time" required><br><br>
+
+        <label for="cook_time">Cook Time (minutes):</label>
+        <input type="number" id="cook_time" name="cook_time" required><br><br>
+
+        <label for="serving_size">Serving Size:</label>
+        <input type="number" id="serving_size" name="serving_size" required><br><br>
+
+        <h2>Ingredients:</h2>
+        <table id="ingredientsTable">
+            <tr>
+                <th>Ingredient Name</th>
+                <th>Quantity</th>
+                <th>Measurement (grams,unit, etc)</th>
+                <th></th>
+            </tr>
+            {% for ingredient in recipe.ingredients %}
+            <tr>
+                <td>
+                    <input type="text" name="ingredient_name[]" required>
+                </td>
+                <td>
+                    <input type="number" name="ingredient_quantity[]" required>
+                </td>
+                <td>
+                    <input type="text" name="ingredient_measurement[]" required>
+                </td>
+                <td><button type="button" onclick="deleteIngredient(this)">Delete</button></td>
+            </tr>
+            {% endfor %}
+        </table>
+        <button type="button" onclick="addIngredient()">Add Ingredient</button>
+        <br>
+
+        <h2>Instructions:</h2>
+        <div id="instructions">
+            {% for step, instruction in recipe.instructions.items() %}
+            <div id="instruction{{ step }}">
+                <label for="step{{ step }}">Step {{ step }}:</label>
+                <textarea id="step{{ step }}" name="instruction[]" rows="4" cols="50" required></textarea>
+                <button onclick="deleteInstruction('{{ step }}')">Delete</button>
+            </div>
+            {% endfor %}
+        </div>
+        <button onclick="addInstruction()">Add Instruction</button>
+
+        <input onclick='return checkName("{{ recipe_list }}")' type="submit" value="Save Recipe">
+        <button onclick="location.href = '/';" style="margin: 0 10px;height: 30px;width: 70px;">Home</button>
+    </form>
+    <script>
+        function checkName(recipeListStr) {
+            let recipe_name = document.getElementById('recipe_name').value;
+            let trimmedStr = recipeListStr.slice(1, -1);
+            let recipeNames = trimmedStr.split(", ").map(function (item) {
+                return item.slice(1, -1);
+            });
+
+            if (recipeNames.some(function (name) {
+                return name === recipe_name;
+            })) {
+                alert('Name already exists. Please enter a different name.');
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+
+</body>
+
+<!-- <body>
     <h1>Add Recipe</h1>
     <form action="/save_recipe" method="POST">
         <label for="recipe_name">Recipe Name:</label>
@@ -49,13 +186,13 @@
             {% for ingredient in recipe.ingredients %}
             <tr>
                 <td>
-                    <input type="text" name="ingredient_name[]" value="{{ ingredient.ingredientName }}" required>
+                    <input type="text" name="ingredient_name[]" required>
                 </td>
                 <td>
-                    <input type="number" name="ingredient_quantity[]" value="{{ ingredient.quantity }}" required>
+                    <input type="number" name="ingredient_quantity[]" required>
                 </td>
                 <td>
-                    <input type="text" name="ingredient_measurement[]" value="{{ ingredient.measurement }}" required>
+                    <input type="text" name="ingredient_measurement[]" required>
                 </td>
                 <td><button type="button" onclick="deleteIngredient(this)">Delete</button></td>
             </tr>
@@ -65,13 +202,36 @@
         <br>
 
         <h2>Instructions:</h2>
-        {% for step, instruction in recipe.instructions.items() %}
-        <label for="step{{ step }}">Step {{ step }}:</label>
-        <textarea id="step{{ step }}" name="instruction[]" rows="4" cols="50" required>{{ instruction }}</textarea>
-        <br><br>
-        {% endfor %}
+        <div id="instructions">
+            {% for step, instruction in recipe.instructions.items() %}
+            <div id="instruction{{ step }}">
+                <label for="step{{ step }}">Step {{ step }}:</label>
+                <textarea id="step{{ step }}" name="instruction[]" rows="4" cols="50" required></textarea>
+                <button onclick="deleteInstruction('{{ step }}')">Delete</button>
+            </div>
+            {% endfor %}
+        </div>
+        <button onclick="addInstruction()">Add Instruction</button>
 
-        <input type="submit" value="Save Recipe">
+        <input onclick='return checkName("{{ recipe_list }}")' type="submit" value="Save Recipe">
     </form>
+    <script>
+        function checkName(recipeListStr) {
+            let recipe_name = document.getElementById(' recipe_name').value; let trimmedStr = recipeListStr.slice(1, -1);
+            let recipeNames = trimmedStr.split(", ").map(function (item) {
+                return item.slice(1, -1);
+            });
+
+            if (recipeNames.some(function (name) {
+                return name === recipe_name;
+            })) {
+                alert('Name already exists. Please enter a different name.');
+                return false;
+            }
+
+            return true;
+        }
+    </script> -->
 </body>
+
 </html>

@@ -4,7 +4,7 @@ import json
 from flask import Flask, render_template, redirect, url_for, flash, request
 
 
-from Core.recipeProject import RecipeManager, Recipe
+from recipeProject import RecipeManager, Recipe
 import logging, json
 from tkinter import Tk, filedialog
 
@@ -40,6 +40,9 @@ def view_id(id):
 
 @app.route('/add', methods=['GET'])
 def add():
+    temp = []
+    for i in rm.RecipeList():
+        temp.append(i.recipe_name)
     return render_template('add.html',recipe = Recipe(
             0,
             "McBurger",
@@ -49,23 +52,50 @@ def add():
             1,
             [
                 {"ingredientName": "bun", "quantity": 1, "measurement": "unit"},
-                {"ingredientName": "secretPatty",
-                    "quantity": 1, "measurement": "unit"},
-                {"ingredientName": "specialMayo",
-                    "quantity": 10, "measurement": "grams"},
-                {"ingredientName": "specialSauce",
-                    "quantity": 20, "measurement": "grams"},
-                {"ingredientName": "lettuce", "quantity": 8, "measurement": "grams"},
-                {"ingredientName": "tomato", "quantity": 8, "measurement": "grams"}
             ],
             {
                 "1": "Assemble the bun and the secret patty.",
-                "2": "Spread special mayo and special sauce on the bun.",
-                "3": "Add lettuce and tomato on top.",
-                "4": "Cook the assembled burger for 12 minutes."
+
             }
+        ),recipe_list = temp
         )
-        )
+
+@app.route('/save_recipe', methods=['POST'])
+def save_recipe():
+    recipe_name = request.form.get('recipe_name')
+    recipe_author = request.form.get('recipe_author')
+    prep_time = int(request.form.get('prep_time'))
+    cook_time = int(request.form.get('cook_time'))
+    serving_size = int(request.form.get('serving_size'))
+    
+    ingredient_names = request.form.getlist('ingredient_name[]')
+    ingredient_quantities = request.form.getlist('ingredient_quantity[]')
+    ingredient_measurements = request.form.getlist('ingredient_measurement[]')
+    
+    ingredients = []
+    for name, quantity, measurement in zip(ingredient_names, ingredient_quantities, ingredient_measurements):
+        ingredient = {
+            'ingredientName': name,
+            'quantity': int(quantity),
+            'measurement': measurement
+        }
+        ingredients.append(ingredient)
+    
+    instruction_texts = request.form.getlist('instruction[]')
+    
+    instructions = {}
+    for i, text in enumerate(instruction_texts, start=1):
+        instructions[str(i)] = text
+    
+    temp = sorted(rm.data, key = lambda x: x.id)
+    # print(temp[-1].id,recipe_name,recipe_author,prep_time,cook_time,serving_size,ingredients,instructions)
+    try:
+        rm.addRecipe(Recipe(temp[-1].id+1,recipe_name,recipe_author,prep_time,cook_time,serving_size,ingredients,instructions))
+    except Exception as e:
+        print(e)
+        return redirect(url_for('home'))
+    
+    return redirect(url_for('home'))
 
 
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
